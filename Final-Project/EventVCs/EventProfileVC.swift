@@ -111,8 +111,6 @@ class EventProfileVC: UIViewController {
         }
     }
     
-    
-    
     func updateEventData() {
         if let userId = userId {
             db.collection("Users").document(userId).updateData([
@@ -120,7 +118,7 @@ class EventProfileVC: UIViewController {
                 "eventOrganizer" : self.eventOrganizerTxt.text ?? "لايوجد" ,
                 "eventDescription": self.eventDescriptionTxt.text ?? "الوصف" ,
                 "eventCity" : self.eventCityTxt.text ?? "لم يحدد" ,
-               "eventKind" : self.selectedType ?? "لم يحدد"
+                "eventKind" : self.selectedType ?? "لم يحدد"
             ])
             {(error) in
                 if error == nil {
@@ -131,8 +129,6 @@ class EventProfileVC: UIViewController {
             }
         }
     }
-    
-    
 }
 
 //extension EventProfileVC: UIPickerViewDelegate, UIPickerViewDataSource  {

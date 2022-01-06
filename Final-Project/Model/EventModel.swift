@@ -9,6 +9,7 @@ import Foundation
 
 struct Event {
     var type: String
+    var eventID: String
     var eventName: String
     var eventOrganizer: String?
     var eventDescription: String?
@@ -16,16 +17,5 @@ struct Event {
     var eventCity: String?
     var eventKind: String?
     var eventImage: String?
-    var requests: [SchoolRequest]?
 }
 
-struct SchoolRequest {
-    var requestID: String
-    var schoolName: String
-    var schoolPhone: String
-    var date:Date
-    var time:String
-    var duration: String
-    var budget: String
-    var requestStatus: String
-}

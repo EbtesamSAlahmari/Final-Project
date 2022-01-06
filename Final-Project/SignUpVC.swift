@@ -20,8 +20,7 @@ class SignUpVC: UIViewController {
     
     let db = Firestore.firestore()
     var selectedType = "event"
-    var schools = [School]()
-    var events = [Event]()
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,11 +35,11 @@ class SignUpVC: UIViewController {
                 self.present(alert, animated: true, completion: nil)
             }else{
                 if self.selectedType == "school" {
-                    self.addSchool(documentId: (user?.user.uid)!)
+                    self.addSchool(documentId:(user?.user.uid)!)
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarS") as! UITabBarController
                     self.present(vc, animated: true, completion: nil)
                 }else {
-                    self.addEvent(documentId: (user?.user.uid)!)
+                    self.addEvent(documentId:(user?.user.uid)!)
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarE") as! UITabBarController
                     self.present(vc, animated: true, completion: nil)
                 }
@@ -86,21 +85,12 @@ class SignUpVC: UIViewController {
         db.collection("Users").document(documentId).setData(
             [
                 "type": "school",
+                "schoolID": documentId,
                 "schoolName": nameTxt.text ?? "مدرسة....",
                 "schoolDescription": "",
                 "schoolPhone": "",
                 "schoolEmail": emailTxt.text! ,
-                "schoolLocation": "",
-                "requests":[[
-                    "requestID": "",
-                    "eventName": "",
-                    "eventOrganizer": "",
-                    "date": "",
-                    "time": "",
-                    "duration": "",
-                    "budget": "",
-                    "requestStatus": "",
-                ]]
+                "schoolLocation": ""
             ]
         )
         {(error) in
@@ -108,8 +98,6 @@ class SignUpVC: UIViewController {
                 print("Error: ",error.localizedDescription)
             }else {
                 print("new school has created..")
-                let newSchool = School(type: self.selectedType, schoolName: self.nameTxt.text ?? "مدرسة....")
-                self.schools.append(newSchool)
             }
         }
     }
@@ -119,23 +107,14 @@ class SignUpVC: UIViewController {
         db.collection("Users").document(documentId).setData(
             [
                 "type": "event",
+                "eventID": documentId,
                 "eventName": nameTxt.text ?? "فعالية....",
                 "eventOrganizer": "",
                 "eventDescription": "",
                 "eventEmail": emailTxt.text! ,
                 "eventCity": "",
                 "eventKind": "",
-                "eventImage": "",
-                "requests":[[
-                    "requestID": "",
-                    "schoolName": "",
-                    "schoolPhone": "",
-                    "date": "",
-                    "time": "",
-                    "duration": "",
-                    "budget": "",
-                    "requestStatus": "",
-                ]]
+                "eventImage": ""
             ]
         )
         {(error) in
@@ -143,8 +122,6 @@ class SignUpVC: UIViewController {
                 print("Error: ",error.localizedDescription)
             }else {
                 print("new event has created..")
-                let newEvent = Event(type: self.selectedType , eventName: self.nameTxt.text ?? "فعالية....")
-                self.events.append(newEvent)
             }
         }
     }

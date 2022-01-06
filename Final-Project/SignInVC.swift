@@ -42,7 +42,25 @@ class SignInVC: UIViewController {
     
     
     @IBAction func forgetPasswordPressed(_ sender: Any) {
-        
+        var textFieldEmail = UITextField()
+        let alert = UIAlertController(title: "إعادة تعيين كلمة المرور", message: "الرجاء إدخال البريد الإلكتروني لإعادة تعيين كلمة المرور", preferredStyle: .alert)
+        alert.addTextField { alartTextField in
+            alartTextField.placeholder = "ادخل البريد الالكتروني"
+            alartTextField.textAlignment = .right
+            textFieldEmail = alartTextField
+        }
+        let OkBtu = UIAlertAction(title: "حسنا", style: .default) { action in
+            Auth.auth().sendPasswordReset(withEmail: textFieldEmail.text!) { error in
+                if let error = error {
+                    let alert2 = UIAlertController(title: "لم تتم إعادة التعيين", message: error.localizedDescription, preferredStyle: .alert)
+                    alert2.addAction(UIAlertAction(title: "حسنا", style: .default, handler: nil))
+                    self.present(alert2, animated: true, completion: nil)
+                }
+            }
+        }
+        alert.addAction(OkBtu)
+        alert.addAction(UIAlertAction(title: "إلغاء", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
     
     func getData(_ userId: String) {

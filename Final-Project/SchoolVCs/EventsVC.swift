@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 
-class EventsVC: UIViewController, UISearchBarDelegate {
+class EventsVC: UIViewController {
     
     @IBOutlet var searchBer: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -28,29 +28,33 @@ class EventsVC: UIViewController, UISearchBarDelegate {
         eventKindPicker.delegate = self
         eventKindPicker.dataSource = self
         searchBer.delegate = self
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         filterEventData(fieldName: "type", equalTo: "event")
     }
     
- 
+    
     
     //MARK: - get specific documents from a collection
     func filterEventData(fieldName: String, equalTo: String ) {
-        db.collection("Users").whereField(fieldName, isEqualTo: equalTo).getDocuments { querySnapshot, error in
-          self.events = []
+        
+        db.collection("Users").whereField(fieldName, isEqualTo: equalTo).getDocuments {
+            querySnapshot, error in
+            self.events = []
             if let error = error {
                 print("Error: ",error.localizedDescription)
             }else {
                 for document in querySnapshot!.documents {
                     let data = document.data()
+                    let eventID = data["eventID"] as? String ?? "nil"
                     let eventName =  data["eventName"] as? String ?? "nil"
                     let eventOrganizer =  data["eventOrganizer"] as? String ?? "nil"
                     let eventDescription =  data["eventDescription"] as? String ?? "nil"
                     let eventEmail =  data["eventEmail"] as? String ?? "nil"
                     let eventCity =  data["eventCity"] as? String ?? "nil"
                     let eventKind =  data["eventKind"] as? String ?? "nil"
-                    let newEvent = Event(type: "event", eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventKind: eventKind)
+                    let newEvent = Event(type: "event", eventID: eventID, eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventKind: eventKind)
                     self.events.append(newEvent)
                 }
                 DispatchQueue.main.async {
@@ -90,7 +94,6 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
             let nextVc = segue.destination as! EventDetailsVC
             nextVc.selectedEvent = selectedEvent
         }
-            
     }
     
     
@@ -101,71 +104,39 @@ extension EventsVC: UIPickerViewDelegate, UIPickerViewDataSource  {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         eventKindArray.count
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return eventKindArray[row]
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if eventKindArray[row] == "الكل"{
             filterEventData(fieldName: "type", equalTo: "event")
         }else {
-          filterEventData(fieldName: "eventKind", equalTo: eventKindArray[row])
-          // events = events.filter { $0.eventKind == eventKindArray[row]}
+            filterEventData(fieldName: "eventKind", equalTo: eventKindArray[row])
+            // events = events.filter { $0.eventKind == eventKindArray[row]}
         }
         
     }
-   
+    
 }
 
-
-
-
-////MARK: - get specific documents from a collection
-//func loadAllRequest() {
-//    db.collection("Users").whereField("type", isEqualTo: "event").getDocuments { querySnapshot, error in
-//        if let error = error {
-//            print("Error: ",error.localizedDescription)
-//        }else {
-//            for document in querySnapshot!.documents {
-//                let data = document.data()
-//                 let eventName =  data["eventName"] as? String ?? "nil"
-//                let eventOrganizer =  data["eventOrganizer"] as? String ?? "nil"
-//                let eventDescription =  data["eventDescription"] as? String ?? "nil"
-//                let eventEmail =  data["eventEmail"] as? String ?? "nil"
-//                let eventCity =  data["eventCity"] as? String ?? "nil"
-//                let eventKind =  data["eventKind"] as? String ?? "nil"
-//            }
-//        }
-//    }
-//}
-
-
-//    func loadAllEvents() {
-//        db.collection("Users").whereField("type", isEqualTo: "event").getDocuments { querySnapshot, error in
-//          self.events = []
-//            if let error = error {
-//                print("Error: ",error.localizedDescription)
-//            }else {
-//                for document in querySnapshot!.documents {
-//                    let data = document.data()
-//                    let eventName =  data["eventName"] as? String ?? "nil"
-//                    let eventOrganizer =  data["eventOrganizer"] as? String ?? "nil"
-//                    let eventDescription =  data["eventDescription"] as? String ?? "nil"
-//                    let eventEmail =  data["eventEmail"] as? String ?? "nil"
-//                    let eventCity =  data["eventCity"] as? String ?? "nil"
-//                    let eventKind =  data["eventKind"] as? String ?? "nil"
-//                    let newEvent = Event(type: "event", eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventKind: eventKind)
-//                    self.events.append(newEvent)
-//                    print(self.events)
-//                }
-//                DispatchQueue.main.async {
-//                    self.tableView.reloadData()
-//                }
-//            }
-//        }
-//    }
+//MARK: -UISearchBarDelegate
+extension EventsVC: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if searchBar.text?.count == 0 {
+            filterEventData(fieldName: "type", equalTo: "event")
+        }else {
+            events = events.filter{$0.eventName.contains(searchBar.text!)}
+            self.tableView.reloadData()
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filterEventData(fieldName: "type", equalTo: "event")
+    }
+}

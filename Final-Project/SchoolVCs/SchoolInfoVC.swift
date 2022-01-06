@@ -25,34 +25,29 @@ class SchoolInfoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getSchoolData()
-        
     }
     
     @IBAction func editSchoolInfo(_ sender: Any) {
         nameTxt.isUserInteractionEnabled = true
         schoolDescription.isUserInteractionEnabled = true
         phone.isUserInteractionEnabled = true
-       // email.isUserInteractionEnabled = true
         
         saveBtn.isHidden = false
         cancelBtn.isHidden = false
         nameTxt.backgroundColor = .white
         schoolDescription.backgroundColor = .white
         phone.backgroundColor = .white
-       // email.backgroundColor = .white
-        
     }
     
     @IBAction func detectLocation(_ sender: Any) {
         
     }
     
-    
     @IBAction func savePressed(_ sender: Any) {
         updateSchoolData()
-        dismiss(animated: true, completion: nil)
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarS") as! UITabBarController
+        self.present(vc, animated: true, completion: nil)
     }
-    
     
     @IBAction func cancelPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -94,23 +89,3 @@ class SchoolInfoVC: UIViewController {
     }
 }
 
-
-
-
-//func getData()  {
-//    db.collection("Posts").order(by: "postDate", descending: true).addSnapshotListener { querySnapshot, error in
-//        self.posts = []
-//        if let error = error {
-//            print("Error: ",error.localizedDescription)
-//        }else {
-//            for document in querySnapshot!.documents {
-//                let data = document.data()
-//                let newPost = Post(name: data["name"] as? String ?? "nil", userName: data["userName"] as? String ?? "nil", userIcon: data["userIcon"] as? String ?? "nil", postDate: data["postDate"] as? Date ?? Date(), postImage: data["postImage"] as? String ?? "nil" , message: data["message"] as? String ?? "nil")
-//                self.posts.append(newPost)
-//            }
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
-//}
