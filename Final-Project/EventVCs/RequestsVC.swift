@@ -26,6 +26,7 @@ class RequestsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getSchoolRequest()
+        
     }
     
     //MARK: - firebase function
@@ -57,7 +58,11 @@ class RequestsVC: UIViewController {
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                        if self.requests.isEmpty {
+                            self.tableView.setEmptyMessage("لايوجد طلبات")
+                        }
                     }
+                    
                 }
             }
         }
@@ -65,28 +70,16 @@ class RequestsVC: UIViewController {
 }
 
 
-//MARK: -UITableView
+//MARK: -UITableViewDelegate, UITableViewDataSource
 extension RequestsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if requests.isEmpty {
-           return 1
-        }else {
         return requests.count
-        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "schoolRequestCell") as! SchoolRequestCell
-        if requests.isEmpty {
-            cell.schoolName.text =  "لا يوجد طلبات"
-            cell.schoolName.textColor = .gray
-            cell.icon.isHidden = true
-        }else {
             cell.schoolName.text = requests[indexPath.row].schoolName
-            cell.schoolName.textColor = .black
-            cell.icon.isHidden = false
-        }
         return cell
     }
     
@@ -106,103 +99,25 @@ extension RequestsVC: UITableViewDelegate, UITableViewDataSource {
         }
 }
 
+//MARK: -UITableView
+extension UITableView {
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .gray
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
+        messageLabel.sizeToFit()
 
+        self.backgroundView = messageLabel
+        self.separatorStyle = .none
+    }
 
+    func restore() {
+        self.backgroundView = nil
+        self.separatorStyle = .singleLine
+    }
+}
 
-
-
-//    func getEventData() {
-//        if let userId = userId {
-//            db.collection("Users").document(userId).getDocument{ documentSnapshot, error in
-//                if let error = error {
-//                    print("Error: ",error.localizedDescription)
-//                }else {
-//                    self.eventOrganizer = documentSnapshot?.get("eventOrganizer") as? String ?? "nil"
-//                    self.getSchoolRequest()
-//                }
-//            }
-//        }
-//    }
-//
-
-
-
-//  func getSchoolRequest() {
-//        if let userId = userId {
-//            db.collection("Users").document(userId).getDocument{ documentSnapshot, error in
-//                self.schoolRequest = []
-//                if let error = error {
-//                    print("Error: ",error.localizedDescription)
-//                }else {
-//                    self.nameLbl.text = documentSnapshot?.get("schoolName") as? String
-//                    self.descriptionLbl.text = documentSnapshot?.get("schoolDescription") as? String
-//                    self.locationLbl.text = documentSnapshot?.get("schoolLocation") as? String
-//                    let schoolRequest = documentSnapshot?.data()?["requests"] as! [[String:Any]]
-//                        for request in schoolRequest {
-//                            let eventName =  request["eventName"] as? String ?? "nil"
-//                            let eventOrganizer =  request["eventOrganizer"] as? String ?? "nil"
-//                            let date =  request["date"] as? Date ?? Date()
-//                            let time =  request["time"] as? String ?? "nil"
-//                            let duration =  request["duration"] as? String ?? "nil"
-//                            let budget =  request["budget"] as? String ?? "nil"
-//                            let requestStatus =  request["requestStatus"] as? String ?? "nil"
-//                            let newRequest = Request(requestID: "" , eventName: eventName, eventOrganizer: eventOrganizer, date: date, time: time, duration: duration, budget: budget, requestStatus: requestStatus)
-//                            self.requests.append(newRequest)
-//                            print("----",self.requests)
-//                        }
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
-//                }
-//            }
-//        }
-
-
-//       db.collection("Users").whereField("type", isEqualTo: "school" ).getDocuments { querySnapshot, error in
-//         self.schoolRequests = []
-//           self.requests = []
-//           if let error = error {
-//               print("Error: ",error.localizedDescription)
-//           }else {
-//               for document in querySnapshot!.documents {
-//                   let data = document.data()
-////                   let schoolName = data["schoolName"] as? String ?? "nil"
-////                   let schoolDescription = data["schoolDescription"] as? String
-////                   let schoolPhone = data["schoolPhone"] as? String
-////                   let schoolEmail = data["schoolEmail"] as? String
-////                   let schoolLocation = data["schoolLocation"] as? String
-//                   let schoolRequest = data["requests"] as! [[String:Any]]
-//                   for request in schoolRequest {
-//                       let requestID =  request["requestID"] as? String ?? "nil"
-//                       print("----",requestID)
-//                       print("++++++",self.userId!)
-//                     //  if requestID == self.userId! {
-//                           let eventName =  request["eventName"] as? String ?? "nil"
-//                           let eventOrganizer =  request["eventOrganizer"] as? String ?? "nil"
-//                           let date =  request["date"] as? Date ?? Date()
-//                           let time =  request["time"] as? String ?? "nil"
-//                           let duration =  request["duration"] as? String ?? "nil"
-//                           let budget =  request["budget"] as? String ?? "niRl"
-//                           let requestStatus =  request["requestStatus"] as? String ?? "nil"
-//                           let newRequest = Request(requestID: requestID , eventName: eventName, eventOrganizer: eventOrganizer, date: date, time: time, duration: duration, budget: budget, requestStatus: requestStatus)
-//                           self.requests.append(newRequest)
-//                           print("----",self.requests)
-//                      // }
-//                   }
-//
-////                   let newArr = School(type: "school", schoolName: schoolName, schoolDescription: schoolDescription, schoolPhone: schoolPhone, schoolEmail: schoolEmail, schoolLocation: schoolLocation, requests: self.requests)
-////                   self.schoolRequests.append(newArr)
-////                   print("----",self.schoolRequests)
-//               }
-//               self.requests = self.requests.filter({ $0.requestID == "c3XCOonQW6ZnWgrLRWxajiG8UbP2"})
-//               print("+++++",self.requests)
-//
-//               DispatchQueue.main.async {
-//                   self.tableView.reloadData()
-//               }
-//           }
-//       }
-//
-//
-//   }
 

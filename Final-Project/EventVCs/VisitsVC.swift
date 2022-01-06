@@ -57,6 +57,9 @@ class VisitsVC: UIViewController {
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                        if self.visits.isEmpty {
+                            self.tableView.setEmptyMessage("لايوجد زيارات")
+                        }
                     }
                 }
             }

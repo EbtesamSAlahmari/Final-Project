@@ -25,6 +25,7 @@ class SchoolProfileVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -92,9 +93,13 @@ class SchoolProfileVC: UIViewController {
                         let newRequest = RequestEvent( eventID: eventID, schoolID: userId, requestID: requestID, eventName: eventName, eventOrganizer: eventOrganizer, date: date, time: time, duration: duration, budget: budget, requestStatus: requestStatus)
                         self.requests.append(newRequest)
                     }
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    if self.requests.isEmpty {
+                        self.tableView.setEmptyMessage("لايوجد طلبات")
+                    }
+                    
+                    }
                 }
             }
         }

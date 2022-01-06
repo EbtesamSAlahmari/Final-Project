@@ -12,8 +12,8 @@
 		48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48712AC0278480D70062B9CA /* SchoolRequestCell.swift */; };
 		48C865EF2784BDDC0068CE4B /* RequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865EE2784BDDC0068CE4B /* RequestModel.swift */; };
 		48C865F32785949E0068CE4B /* RequestDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865F22785949E0068CE4B /* RequestDetailsVC.swift */; };
-		48C865F9278641BB0068CE4B /* Cities.json in Resources */ = {isa = PBXBuildFile; fileRef = 48C865F8278641BB0068CE4B /* Cities.json */; };
 		48C865FB2786AD3E0068CE4B /* EventVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865FA2786AD3E0068CE4B /* EventVisitCell.swift */; };
+		48C865FD2786E5BF0068CE4B /* CityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865FC2786E5BF0068CE4B /* CityModel.swift */; };
 		48D0F2B927804FDE00F11F60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D0F2B827804FDE00F11F60 /* AppDelegate.swift */; };
 		48D0F2BB27804FDE00F11F60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D0F2BA27804FDE00F11F60 /* SceneDelegate.swift */; };
 		48D0F2BD27804FDE00F11F60 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D0F2BC27804FDE00F11F60 /* SignInVC.swift */; };
@@ -43,8 +43,8 @@
 		48712AC0278480D70062B9CA /* SchoolRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolRequestCell.swift; sourceTree = "<group>"; };
 		48C865EE2784BDDC0068CE4B /* RequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestModel.swift; sourceTree = "<group>"; };
 		48C865F22785949E0068CE4B /* RequestDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDetailsVC.swift; sourceTree = "<group>"; };
-		48C865F8278641BB0068CE4B /* Cities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Cities.json; sourceTree = "<group>"; };
 		48C865FA2786AD3E0068CE4B /* EventVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVisitCell.swift; sourceTree = "<group>"; };
+		48C865FC2786E5BF0068CE4B /* CityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityModel.swift; sourceTree = "<group>"; };
 		48D0F2B527804FDE00F11F60 /* Final-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Final-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48D0F2B827804FDE00F11F60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		48D0F2BA27804FDE00F11F60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				48D0F2D027807B8800F11F60 /* EventsVC.swift */,
-				48C865F8278641BB0068CE4B /* Cities.json */,
+				48C865FC2786E5BF0068CE4B /* CityModel.swift */,
 				48D0F2E927832AF300F11F60 /* EventsCell.swift */,
 				48D0F2ED2783878600F11F60 /* EventDetailsVC.swift */,
 				48712ABE278433580062B9CA /* SendRequestVC.swift */,
@@ -243,7 +243,6 @@
 			files = (
 				48D0F2C527804FE500F11F60 /* LaunchScreen.storyboard in Resources */,
 				48D0F2D32780B84D00F11F60 /* GoogleService-Info.plist in Resources */,
-				48C865F9278641BB0068CE4B /* Cities.json in Resources */,
 				48D0F2C227804FE500F11F60 /* Assets.xcassets in Resources */,
 				48D0F2C027804FDE00F11F60 /* Main.storyboard in Resources */,
 			);
@@ -312,6 +311,7 @@
 				48D0F2CF2780740400F11F60 /* SignUpVC.swift in Sources */,
 				48D0F2DD278183E500F11F60 /* EventModel.swift in Sources */,
 				48C865EF2784BDDC0068CE4B /* RequestModel.swift in Sources */,
+				48C865FD2786E5BF0068CE4B /* CityModel.swift in Sources */,
 				48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */,
 				48D0F2EE2783878600F11F60 /* EventDetailsVC.swift in Sources */,
 				48D0F2E22781B67300F11F60 /* VisitsVC.swift in Sources */,

@@ -59,6 +59,9 @@ class EventsVC: UIViewController {
                 }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
+                    if self.events.isEmpty {
+                        self.tableView.setEmptyMessage("لايوجد فعاليات")
+                    }
                 }
             }
         }

@@ -16,10 +16,14 @@ class EventProfileVC: UIViewController {
     @IBOutlet weak var eventDescriptionTxt: UITextView!
     @IBOutlet weak var eventEmailLbl: UILabel!
     @IBOutlet weak var eventCityTxt: UITextField!
+    
+    @IBOutlet weak var eventKind: UILabel!
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var nonProfitType: UIButton!
     @IBOutlet weak var forProfitType: UIButton!
+    
+    @IBOutlet weak var stackView: UIStackView!
     
     var selectedType = "ربحية"
     
@@ -83,6 +87,8 @@ class EventProfileVC: UIViewController {
         forProfitType.isUserInteractionEnabled = state
         nonProfitType.isUserInteractionEnabled = state
         saveBtn.isHidden = hidden
+        stackView.isHidden = hidden
+        eventKind.isHidden = !hidden
         
         nameTxt.backgroundColor = color
         eventOrganizerTxt.backgroundColor = color
@@ -104,8 +110,8 @@ class EventProfileVC: UIViewController {
                     self.eventDescriptionTxt.text = documentSnapshot?.get("eventDescription") as? String
                     self.eventEmailLbl.text = documentSnapshot?.get("eventEmail") as? String
                     self.eventCityTxt.text = documentSnapshot?.get("eventCity") as? String
-                    self.selectedType = documentSnapshot?.get("eventKind") as? String ?? ""
-                    
+                    //self.selectedType = documentSnapshot?.get("eventKind") as? String ?? ""
+                    self.eventKind.text = documentSnapshot?.get("eventKind") as? String ?? ""
                 }
             }
         }
