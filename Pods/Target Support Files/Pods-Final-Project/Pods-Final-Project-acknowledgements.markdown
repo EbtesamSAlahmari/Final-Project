@@ -1904,6 +1904,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    limitations under the License.
 
 
+## GoogleMaps
+
+Copyright 2021 Google
+
 ## GoogleUtilities
 
 

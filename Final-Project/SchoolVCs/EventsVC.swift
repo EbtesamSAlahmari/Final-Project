@@ -14,12 +14,29 @@ class EventsVC: UIViewController {
     @IBOutlet var searchBer: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var eventKindPicker: UIPickerView!
+    @IBOutlet weak var eventCityPicker: UIPickerView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
     var events = [Event]()
     var selectedEvent:Event?
-    var eventKindArray = ["الكل","ربحية","غير ربحية"]
+   // var eventKindArray = ["الكل","ربحية","غير ربحية"]
+    var cities = [
+        "الكل",
+        "الرياض",
+                    "مكة المكرمة",
+                    "المدينةالمنورة",
+                    "القصيم",
+                    "الشرقية",
+                    "عسير",
+                    "تبوك",
+                    "حائل",
+                    "الحدودالشمالية",
+                    "جازان",
+                    "نجران",
+                    "الباحة",
+                    "الجوف"
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +44,8 @@ class EventsVC: UIViewController {
         tableView.dataSource = self
         eventKindPicker.delegate = self
         eventKindPicker.dataSource = self
+        eventCityPicker.delegate = self
+        eventCityPicker.dataSource = self
         searchBer.delegate = self
         
     }
@@ -53,8 +72,8 @@ class EventsVC: UIViewController {
                     let eventDescription =  data["eventDescription"] as? String ?? "nil"
                     let eventEmail =  data["eventEmail"] as? String ?? "nil"
                     let eventCity =  data["eventCity"] as? String ?? "nil"
-                    let eventKind =  data["eventKind"] as? String ?? "nil"
-                    let newEvent = Event(type: "event", eventID: eventID, eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventKind: eventKind)
+                    let eventPrice =  data["eventPrice"] as? Double ?? 0.0
+                    let newEvent = Event(type: "event", eventID: eventID, eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventPrice: eventPrice)
                     self.events.append(newEvent)
                 }
                 DispatchQueue.main.async {
@@ -79,8 +98,9 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventsCell") as! EventsCell
         cell.eventNameLbl.text = events[indexPath.row].eventName
         cell.eventTeamLbl.text = events[indexPath.row].eventOrganizer
-        cell.city.text = events[indexPath.row].eventCity
-        cell.kind.text = events[indexPath.row].eventKind
+        cell.cityLbl.text = events[indexPath.row].eventCity
+        cell.priceLbl.text = "\(events[indexPath.row].eventPrice ?? 0)" + " ريال" 
+        print("\(events[indexPath.row].eventPrice ?? 0)")
         return cell
     }
     
@@ -109,21 +129,37 @@ extension EventsVC: UIPickerViewDelegate, UIPickerViewDataSource  {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        eventKindArray.count
+      //  if pickerView.tag == 0 {
+            return cities.count
+//        } else {
+//            return eventKindArray.count
+//        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return eventKindArray[row]
+       // if pickerView.tag == 0 {
+            return cities[row]
+//        } else {
+//            return eventKindArray[row]
+//        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if eventKindArray[row] == "الكل"{
-            filterEventData(fieldName: "type", equalTo: "event")
-        }else {
-            filterEventData(fieldName: "eventKind", equalTo: eventKindArray[row])
-            // events = events.filter { $0.eventKind == eventKindArray[row]}
+        if pickerView.tag == 0 {
+            if cities[row] == "الكل" {
+                //
+            }else {
+               // cities = cities.filter({$0 == cities[row] })
+            }
         }
-        
+//        else {
+//            if eventKindArray[row] == "الكل"{
+//                filterEventData(fieldName: "type", equalTo: "event")
+//            }else {
+//                filterEventData(fieldName: "eventKind", equalTo: eventKindArray[row])
+//                // events = events.filter { $0.eventKind == eventKindArray[row]}
+//            }
+//        }
     }
     
 }

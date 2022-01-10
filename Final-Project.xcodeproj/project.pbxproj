@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		30C8818E83FED0C2FE00E5D8 /* Pods_Final_Project.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FE5666B35A4F366526DBCBF /* Pods_Final_Project.framework */; };
+		4818391727876487009E3FAF /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818391627876486009E3FAF /* MapVC.swift */; };
+		481839192788CC0D009E3FAF /* UpdatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */; };
+		4818391B2789A977009E3FAF /* MapEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818391A2789A977009E3FAF /* MapEventVC.swift */; };
 		48712ABF278433580062B9CA /* SendRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48712ABE278433580062B9CA /* SendRequestVC.swift */; };
 		48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48712AC0278480D70062B9CA /* SchoolRequestCell.swift */; };
 		48C865EF2784BDDC0068CE4B /* RequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865EE2784BDDC0068CE4B /* RequestModel.swift */; };
 		48C865F32785949E0068CE4B /* RequestDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865F22785949E0068CE4B /* RequestDetailsVC.swift */; };
 		48C865FB2786AD3E0068CE4B /* EventVisitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865FA2786AD3E0068CE4B /* EventVisitCell.swift */; };
-		48C865FD2786E5BF0068CE4B /* CityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865FC2786E5BF0068CE4B /* CityModel.swift */; };
 		48D0F2B927804FDE00F11F60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D0F2B827804FDE00F11F60 /* AppDelegate.swift */; };
 		48D0F2BB27804FDE00F11F60 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D0F2BA27804FDE00F11F60 /* SceneDelegate.swift */; };
 		48D0F2BD27804FDE00F11F60 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48D0F2BC27804FDE00F11F60 /* SignInVC.swift */; };
@@ -39,12 +41,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4818391627876486009E3FAF /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
+		481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePasswordVC.swift; sourceTree = "<group>"; };
+		4818391A2789A977009E3FAF /* MapEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapEventVC.swift; sourceTree = "<group>"; };
 		48712ABE278433580062B9CA /* SendRequestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendRequestVC.swift; sourceTree = "<group>"; };
 		48712AC0278480D70062B9CA /* SchoolRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolRequestCell.swift; sourceTree = "<group>"; };
 		48C865EE2784BDDC0068CE4B /* RequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestModel.swift; sourceTree = "<group>"; };
 		48C865F22785949E0068CE4B /* RequestDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDetailsVC.swift; sourceTree = "<group>"; };
 		48C865FA2786AD3E0068CE4B /* EventVisitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventVisitCell.swift; sourceTree = "<group>"; };
-		48C865FC2786E5BF0068CE4B /* CityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityModel.swift; sourceTree = "<group>"; };
 		48D0F2B527804FDE00F11F60 /* Final-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Final-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48D0F2B827804FDE00F11F60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		48D0F2BA27804FDE00F11F60 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +127,9 @@
 				48D0F2D62780E88900F11F60 /* SettingVC.swift */,
 				48D0F2D82780E9CA00F11F60 /* SettingCell.swift */,
 				48D0F2BE27804FDE00F11F60 /* Main.storyboard */,
+				4818391A2789A977009E3FAF /* MapEventVC.swift */,
+				481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */,
+				4818391627876486009E3FAF /* MapVC.swift */,
 				48D0F2EB2783853500F11F60 /* EventVCs */,
 				48D0F2EC2783857500F11F60 /* SchoolVCs */,
 				48D0F2DE278186B700F11F60 /* Model */,
@@ -162,7 +169,6 @@
 			isa = PBXGroup;
 			children = (
 				48D0F2D027807B8800F11F60 /* EventsVC.swift */,
-				48C865FC2786E5BF0068CE4B /* CityModel.swift */,
 				48D0F2E927832AF300F11F60 /* EventsCell.swift */,
 				48D0F2ED2783878600F11F60 /* EventDetailsVC.swift */,
 				48712ABE278433580062B9CA /* SendRequestVC.swift */,
@@ -193,6 +199,7 @@
 				48D0F2B227804FDE00F11F60 /* Frameworks */,
 				48D0F2B327804FDE00F11F60 /* Resources */,
 				A8CB3DEEA4C8B42E9E1BB5D8 /* [CP] Embed Pods Frameworks */,
+				092DC95D39A9B5EDA7F512CD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -251,6 +258,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		092DC95D39A9B5EDA7F512CD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Final-Project/Pods-Final-Project-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Final-Project/Pods-Final-Project-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Final-Project/Pods-Final-Project-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		09F5DC40FCA1ADE422BF892B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -303,6 +327,7 @@
 				48D0F2D52780B98100F11F60 /* AuthErrorCode.swift in Sources */,
 				48C865FB2786AD3E0068CE4B /* EventVisitCell.swift in Sources */,
 				48712ABF278433580062B9CA /* SendRequestVC.swift in Sources */,
+				4818391B2789A977009E3FAF /* MapEventVC.swift in Sources */,
 				48C865F32785949E0068CE4B /* RequestDetailsVC.swift in Sources */,
 				48D0F2DB278181AF00F11F60 /* SchoolModel.swift in Sources */,
 				48D0F2B927804FDE00F11F60 /* AppDelegate.swift in Sources */,
@@ -311,7 +336,8 @@
 				48D0F2CF2780740400F11F60 /* SignUpVC.swift in Sources */,
 				48D0F2DD278183E500F11F60 /* EventModel.swift in Sources */,
 				48C865EF2784BDDC0068CE4B /* RequestModel.swift in Sources */,
-				48C865FD2786E5BF0068CE4B /* CityModel.swift in Sources */,
+				4818391727876487009E3FAF /* MapVC.swift in Sources */,
+				481839192788CC0D009E3FAF /* UpdatePasswordVC.swift in Sources */,
 				48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */,
 				48D0F2EE2783878600F11F60 /* EventDetailsVC.swift in Sources */,
 				48D0F2E22781B67300F11F60 /* VisitsVC.swift in Sources */,

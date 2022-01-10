@@ -47,7 +47,7 @@ class VisitsVC: UIViewController {
                             let eventName = data["eventName"] as? String ?? "nil"
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                             
-                            let date = data["date"] as? Date ?? Date()
+                            let date = data["date"] as? String ?? "لم يحدد"
                             let time = data["time"] as? String ?? "nil"
                             let duration = data["duration"] as? String ?? "nil"
                             let budget = data["budget"] as? String ?? "nil"
@@ -79,6 +79,8 @@ extension VisitsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventVisitCell") as! EventVisitCell
         cell.schoolName.text = visits[indexPath.row].schoolName
+        cell.visitDate.text = visits[indexPath.row].date
+        cell.visitBudget.text = visits[indexPath.row].budget
         return cell
     }
     

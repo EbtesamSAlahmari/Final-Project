@@ -13,7 +13,6 @@ class SchoolProfileVC: UIViewController {
     
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var descriptionLbl: UILabel!
-    @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     let db = Firestore.firestore()
@@ -66,7 +65,6 @@ class SchoolProfileVC: UIViewController {
                 }else {
                     self.nameLbl.text = documentSnapshot?.get("schoolName") as? String
                     self.descriptionLbl.text = documentSnapshot?.get("schoolDescription") as? String
-                    self.locationLbl.text = documentSnapshot?.get("schoolLocation") as? String
                 }
             }
         }
@@ -86,7 +84,7 @@ class SchoolProfileVC: UIViewController {
                         let eventName = data["eventName"] as? String ?? "nil"
                         let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                         let requestStatus = data["requestStatus"] as? String ?? "nil"
-                        let date = data["date"] as? Date ?? Date()
+                        let date = data["date"] as? String ?? "لم يحدد"
                         let time = data["time"] as? String ?? "nil"
                         let duration = data["duration"] as? String ?? "nil"
                         let budget = data["budget"] as? String ?? "nil"

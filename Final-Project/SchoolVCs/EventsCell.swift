@@ -10,6 +10,6 @@ import UIKit
 class EventsCell: UITableViewCell {
     @IBOutlet weak var eventNameLbl: UILabel!
     @IBOutlet weak var eventTeamLbl: UILabel!
-    @IBOutlet weak var city: UILabel!
-    @IBOutlet weak var kind: UILabel!
+    @IBOutlet weak var cityLbl: UILabel!
+    @IBOutlet weak var priceLbl: UILabel!
 }

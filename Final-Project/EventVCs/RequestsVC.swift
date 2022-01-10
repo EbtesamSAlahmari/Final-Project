@@ -48,7 +48,7 @@ class RequestsVC: UIViewController {
                             let eventName = data["eventName"] as? String ?? "nil"
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                             
-                            let date = data["date"] as? Date ?? Date()
+                            let date = data["date"] as? String ?? "لم يحدد"
                             let time = data["time"] as? String ?? "nil"
                             let duration = data["duration"] as? String ?? "nil"
                             let budget = data["budget"] as? String ?? "nil"

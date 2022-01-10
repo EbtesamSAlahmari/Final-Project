@@ -17,15 +17,9 @@ class EventProfileVC: UIViewController {
     @IBOutlet weak var eventEmailLbl: UILabel!
     @IBOutlet weak var eventCityTxt: UITextField!
     
-    @IBOutlet weak var eventKind: UILabel!
+    @IBOutlet weak var eventPriceTxt: UITextField!
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var saveBtn: UIButton!
-    @IBOutlet weak var nonProfitType: UIButton!
-    @IBOutlet weak var forProfitType: UIButton!
-    
-    @IBOutlet weak var stackView: UIStackView!
-    
-    var selectedType = "ربحية"
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -58,42 +52,28 @@ class EventProfileVC: UIViewController {
         updateView(state: false, hidden: true, color: #colorLiteral(red: 0.9669799209, green: 0.9765892625, blue: 0.9980371594, alpha: 1))
     }
     
-    @IBAction func forProfitChoice(_ sender: UIButton) {
-        changeStatusBtn(sender)
-        nonProfitType.setImage(UIImage(systemName: "squareshape"), for: .normal)
-        selectedType = "ربحية"
-    }
-    
-    @IBAction func nonProfitChoice(_ sender: UIButton) {
-        changeStatusBtn(sender)
-        selectedType = "غير ربحية"
-        forProfitType.setImage(UIImage(systemName: "squareshape"), for: .normal)
-    }
-    
-    func changeStatusBtn(_ button: UIButton) {
-        if button.currentImage == UIImage(systemName: "squareshape") {
-            button.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
-            
-        }else {
-            button.setImage(UIImage(systemName: "squareshape"), for: .normal)
-        }
-    }
+//    func changeStatusBtn(_ button: UIButton) {
+//        if button.currentImage == UIImage(systemName: "squareshape") {
+//            button.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+//            
+//        }else {
+//            button.setImage(UIImage(systemName: "squareshape"), for: .normal)
+//        }
+//    }
     
     func updateView(state: Bool, hidden: Bool, color: UIColor) {
         nameTxt.isUserInteractionEnabled = state
         eventOrganizerTxt.isUserInteractionEnabled = state
         eventDescriptionTxt.isUserInteractionEnabled = state
         eventCityTxt.isUserInteractionEnabled = state
-        forProfitType.isUserInteractionEnabled = state
-        nonProfitType.isUserInteractionEnabled = state
+        eventPriceTxt.isUserInteractionEnabled = state
         saveBtn.isHidden = hidden
-        stackView.isHidden = hidden
-        eventKind.isHidden = !hidden
         
         nameTxt.backgroundColor = color
         eventOrganizerTxt.backgroundColor = color
         eventDescriptionTxt.backgroundColor = color
         eventCityTxt.backgroundColor = color
+        eventPriceTxt.backgroundColor = color
     }
     
     
@@ -105,13 +85,12 @@ class EventProfileVC: UIViewController {
                 if let error = error {
                     print("Error: ",error.localizedDescription)
                 }else {
-                    self.nameTxt.text = documentSnapshot?.get("eventName") as? String
-                    self.eventOrganizerTxt.text = documentSnapshot?.get("eventOrganizer") as? String
-                    self.eventDescriptionTxt.text = documentSnapshot?.get("eventDescription") as? String
+                    self.nameTxt.text = documentSnapshot?.get("eventName") as? String ?? "فعالية ...."
+                    self.eventOrganizerTxt.text = documentSnapshot?.get("eventOrganizer") as? String ?? "لم يحدد"
+                    self.eventDescriptionTxt.text = documentSnapshot?.get("eventDescription") as? String ?? "الوصف لايوجد"
                     self.eventEmailLbl.text = documentSnapshot?.get("eventEmail") as? String
-                    self.eventCityTxt.text = documentSnapshot?.get("eventCity") as? String
-                    //self.selectedType = documentSnapshot?.get("eventKind") as? String ?? ""
-                    self.eventKind.text = documentSnapshot?.get("eventKind") as? String ?? ""
+                    self.eventCityTxt.text = documentSnapshot?.get("eventCity") as? String ?? "لم يحدد"
+                    self.eventPriceTxt.text = String(documentSnapshot?.get("eventPrice") as? Double ?? 0.0)
                 }
             }
         }
@@ -122,9 +101,9 @@ class EventProfileVC: UIViewController {
             db.collection("Users").document(userId).updateData([
                 "eventName" : self.nameTxt.text ?? "فعالية ...." ,
                 "eventOrganizer" : self.eventOrganizerTxt.text ?? "لايوجد" ,
-                "eventDescription": self.eventDescriptionTxt.text ?? "الوصف" ,
+                "eventDescription": self.eventDescriptionTxt.text ?? "الوصف لايوجد" ,
                 "eventCity" : self.eventCityTxt.text ?? "لم يحدد" ,
-                "eventKind" : self.selectedType ?? "لم يحدد"
+                "eventPrice" : Double(self.eventPriceTxt.text ?? "") ?? 0.0
             ])
             {(error) in
                 if error == nil {

@@ -15,7 +15,7 @@ struct Event {
     var eventDescription: String?
     var eventEmail: String?
     var eventCity: String?
-    var eventKind: String?
     var eventImage: String?
+    var eventPrice: Double?
 }
 

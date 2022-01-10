@@ -15,5 +15,11 @@ struct School {
     var schoolPhone: String?
     var schoolEmail: String?
     var schoolLocation: String?
+    var loca: [location]
+}
+
+struct location {
+    var lat: Double
+    var lag: Double
 }
 

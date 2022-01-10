@@ -9,4 +9,5 @@ target 'Final-Project' do
 pod 'Firebase/Auth'
 pod 'Firebase/Firestore'
 pod 'Firebase/Storage'
+pod 'GoogleMaps'
 end

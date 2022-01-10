@@ -24,7 +24,9 @@ class SchoolInfoVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getSchoolData()
+        DispatchQueue.main.async {
+            self.getSchoolData()
+        }
     }
     
     @IBAction func editSchoolInfo(_ sender: Any) {
@@ -45,12 +47,11 @@ class SchoolInfoVC: UIViewController {
     
     @IBAction func savePressed(_ sender: Any) {
         updateSchoolData()
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarS") as! UITabBarController
-        self.present(vc, animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     //MARK: - firebase functions
@@ -65,6 +66,7 @@ class SchoolInfoVC: UIViewController {
                     self.schoolDescription.text = documentSnapshot?.get("schoolDescription") as? String
                     self.phone.text = documentSnapshot?.get("schoolPhone") as? String
                     self.email.text = documentSnapshot?.get("schoolEmail") as? String
+                    self.location.text = documentSnapshot?.get("schoolLocation") as? String
                 }
             }
         }
@@ -75,8 +77,7 @@ class SchoolInfoVC: UIViewController {
             db.collection("Users").document(userId).updateData([
                 "schoolName" : self.nameTxt.text ?? "مدرسة ...." ,
                 "schoolDescription" : self.schoolDescription.text ?? "الوصف" ,
-                "schoolPhone": self.phone.text ?? "لا يوجد" ,
-                "schoolLocation" : self.location.text ?? "لم يحدد"
+                "schoolPhone": self.phone.text ?? "لا يوجد" 
             ])
             {(error) in
                 if error == nil {

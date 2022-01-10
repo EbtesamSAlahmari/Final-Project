@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import MessageUI
 
 class SettingVC: UIViewController {
     
@@ -18,6 +19,7 @@ class SettingVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        
     }
     
     @IBAction func signOutPressed(_ sender: Any) {
@@ -58,4 +60,38 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row
+        {
+        case 0:
+            print("nothing")
+        case 1:
+            sendEmail()
+        case 2:
+            print("nothing")
+        case 3:
+            print("nothing")
+        case 4:
+           performSegue(withIdentifier: "changePassword", sender: nil)
+        default:
+            print("nothing")
+        }
+    }
+    
+}
+
+//MARK: -MFMailComposeViewControllerDelegate
+extension SettingVC: MFMailComposeViewControllerDelegate {
+    func sendEmail(){
+        let composeVC = MFMailComposeViewController()
+        composeVC.mailComposeDelegate = self
+        // Configure the fields of the interface.
+        composeVC.setToRecipients(["example@example.com"])
+        composeVC.setSubject("subject")
+        // Present the view controller modally.
+        self.present(composeVC, animated: true, completion: nil)
+    }
+    func mailComposeController(_ controller: MFMailComposeViewController,didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
 }
