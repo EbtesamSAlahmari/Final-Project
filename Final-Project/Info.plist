@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>السماح بالوصول الى الصور لإختيار صورة</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>استخدام الموقع لتحديد موقع المدرسة</string>
 	<key>UIApplicationSceneManifest</key>

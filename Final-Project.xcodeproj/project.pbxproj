@@ -11,7 +11,11 @@
 		4818391727876487009E3FAF /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818391627876486009E3FAF /* MapVC.swift */; };
 		481839192788CC0D009E3FAF /* UpdatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */; };
 		4818391B2789A977009E3FAF /* MapEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818391A2789A977009E3FAF /* MapEventVC.swift */; };
-		48712ABF278433580062B9CA /* SendRequestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48712ABE278433580062B9CA /* SendRequestVC.swift */; };
+		4818393F278DD89C009E3FAF /* PrivacyPolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818393E278DD89C009E3FAF /* PrivacyPolicyVC.swift */; };
+		48183941278DE30F009E3FAF /* PrivacyPolicy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 48183940278DE30F009E3FAF /* PrivacyPolicy.pdf */; };
+		48183943278DEB21009E3FAF /* AboutUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48183942278DEB21009E3FAF /* AboutUs.swift */; };
+		48183945278F5B6B009E3FAF /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48183944278F5B6B009E3FAF /* CustomView.swift */; };
+		481839492791B890009E3FAF /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481839482791B890009E3FAF /* CustomButton.swift */; };
 		48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48712AC0278480D70062B9CA /* SchoolRequestCell.swift */; };
 		48C865EF2784BDDC0068CE4B /* RequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865EE2784BDDC0068CE4B /* RequestModel.swift */; };
 		48C865F32785949E0068CE4B /* RequestDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C865F22785949E0068CE4B /* RequestDetailsVC.swift */; };
@@ -44,7 +48,11 @@
 		4818391627876486009E3FAF /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePasswordVC.swift; sourceTree = "<group>"; };
 		4818391A2789A977009E3FAF /* MapEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapEventVC.swift; sourceTree = "<group>"; };
-		48712ABE278433580062B9CA /* SendRequestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendRequestVC.swift; sourceTree = "<group>"; };
+		4818393E278DD89C009E3FAF /* PrivacyPolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyVC.swift; sourceTree = "<group>"; };
+		48183940278DE30F009E3FAF /* PrivacyPolicy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrivacyPolicy.pdf; sourceTree = "<group>"; };
+		48183942278DEB21009E3FAF /* AboutUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUs.swift; sourceTree = "<group>"; };
+		48183944278F5B6B009E3FAF /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
+		481839482791B890009E3FAF /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		48712AC0278480D70062B9CA /* SchoolRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolRequestCell.swift; sourceTree = "<group>"; };
 		48C865EE2784BDDC0068CE4B /* RequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestModel.swift; sourceTree = "<group>"; };
 		48C865F22785949E0068CE4B /* RequestDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDetailsVC.swift; sourceTree = "<group>"; };
@@ -127,14 +135,17 @@
 				48D0F2D62780E88900F11F60 /* SettingVC.swift */,
 				48D0F2D82780E9CA00F11F60 /* SettingCell.swift */,
 				48D0F2BE27804FDE00F11F60 /* Main.storyboard */,
-				4818391A2789A977009E3FAF /* MapEventVC.swift */,
+				481839482791B890009E3FAF /* CustomButton.swift */,
+				48183942278DEB21009E3FAF /* AboutUs.swift */,
+				4818393E278DD89C009E3FAF /* PrivacyPolicyVC.swift */,
 				481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */,
-				4818391627876486009E3FAF /* MapVC.swift */,
+				48183944278F5B6B009E3FAF /* CustomView.swift */,
 				48D0F2EB2783853500F11F60 /* EventVCs */,
 				48D0F2EC2783857500F11F60 /* SchoolVCs */,
 				48D0F2DE278186B700F11F60 /* Model */,
 				48D0F2D42780B98100F11F60 /* AuthErrorCode.swift */,
 				48D0F2C127804FE500F11F60 /* Assets.xcassets */,
+				48183940278DE30F009E3FAF /* PrivacyPolicy.pdf */,
 				48D0F2C327804FE500F11F60 /* LaunchScreen.storyboard */,
 				48D0F2C627804FE500F11F60 /* Info.plist */,
 				48D0F2D22780B84C00F11F60 /* GoogleService-Info.plist */,
@@ -156,11 +167,12 @@
 			isa = PBXGroup;
 			children = (
 				48D0F2E12781B67300F11F60 /* VisitsVC.swift */,
-				48C865FA2786AD3E0068CE4B /* EventVisitCell.swift */,
 				48D0F2E32781B6CA00F11F60 /* EventProfileVC.swift */,
 				48D0F2DF2781B65D00F11F60 /* RequestsVC.swift */,
+				48C865FA2786AD3E0068CE4B /* EventVisitCell.swift */,
 				48712AC0278480D70062B9CA /* SchoolRequestCell.swift */,
 				48C865F22785949E0068CE4B /* RequestDetailsVC.swift */,
+				4818391A2789A977009E3FAF /* MapEventVC.swift */,
 			);
 			path = EventVCs;
 			sourceTree = "<group>";
@@ -171,10 +183,10 @@
 				48D0F2D027807B8800F11F60 /* EventsVC.swift */,
 				48D0F2E927832AF300F11F60 /* EventsCell.swift */,
 				48D0F2ED2783878600F11F60 /* EventDetailsVC.swift */,
-				48712ABE278433580062B9CA /* SendRequestVC.swift */,
 				48D0F2CC2780564B00F11F60 /* SchoolProfileVC.swift */,
 				48D0F2E7278310BC00F11F60 /* RequestCell.swift */,
 				48D0F2E52782D19600F11F60 /* SchoolInfoVC.swift */,
+				4818391627876486009E3FAF /* MapVC.swift */,
 			);
 			path = SchoolVCs;
 			sourceTree = "<group>";
@@ -248,6 +260,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48183941278DE30F009E3FAF /* PrivacyPolicy.pdf in Resources */,
 				48D0F2C527804FE500F11F60 /* LaunchScreen.storyboard in Resources */,
 				48D0F2D32780B84D00F11F60 /* GoogleService-Info.plist in Resources */,
 				48D0F2C227804FE500F11F60 /* Assets.xcassets in Resources */,
@@ -325,18 +338,21 @@
 				48D0F2BD27804FDE00F11F60 /* SignInVC.swift in Sources */,
 				48D0F2D72780E88900F11F60 /* SettingVC.swift in Sources */,
 				48D0F2D52780B98100F11F60 /* AuthErrorCode.swift in Sources */,
+				481839492791B890009E3FAF /* CustomButton.swift in Sources */,
 				48C865FB2786AD3E0068CE4B /* EventVisitCell.swift in Sources */,
-				48712ABF278433580062B9CA /* SendRequestVC.swift in Sources */,
 				4818391B2789A977009E3FAF /* MapEventVC.swift in Sources */,
 				48C865F32785949E0068CE4B /* RequestDetailsVC.swift in Sources */,
 				48D0F2DB278181AF00F11F60 /* SchoolModel.swift in Sources */,
 				48D0F2B927804FDE00F11F60 /* AppDelegate.swift in Sources */,
+				4818393F278DD89C009E3FAF /* PrivacyPolicyVC.swift in Sources */,
 				48D0F2E8278310BC00F11F60 /* RequestCell.swift in Sources */,
 				48D0F2CD2780564B00F11F60 /* SchoolProfileVC.swift in Sources */,
+				48183943278DEB21009E3FAF /* AboutUs.swift in Sources */,
 				48D0F2CF2780740400F11F60 /* SignUpVC.swift in Sources */,
 				48D0F2DD278183E500F11F60 /* EventModel.swift in Sources */,
 				48C865EF2784BDDC0068CE4B /* RequestModel.swift in Sources */,
 				4818391727876487009E3FAF /* MapVC.swift in Sources */,
+				48183945278F5B6B009E3FAF /* CustomView.swift in Sources */,
 				481839192788CC0D009E3FAF /* UpdatePasswordVC.swift in Sources */,
 				48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */,
 				48D0F2EE2783878600F11F60 /* EventDetailsVC.swift in Sources */,

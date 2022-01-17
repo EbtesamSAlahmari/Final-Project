@@ -13,44 +13,49 @@ class EventsVC: UIViewController {
     
     @IBOutlet var searchBer: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var eventKindPicker: UIPickerView!
     @IBOutlet weak var eventCityPicker: UIPickerView!
+    @IBOutlet weak var contentView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
     var events = [Event]()
+    var alterEvents = [Event]()
     var selectedEvent:Event?
-   // var eventKindArray = ["الكل","ربحية","غير ربحية"]
+ 
     var cities = [
         "الكل",
         "الرياض",
-                    "مكة المكرمة",
-                    "المدينةالمنورة",
-                    "القصيم",
-                    "الشرقية",
-                    "عسير",
-                    "تبوك",
-                    "حائل",
-                    "الحدودالشمالية",
-                    "جازان",
-                    "نجران",
-                    "الباحة",
-                    "الجوف"
-    ]
+        "مكة المكرمة",
+        "المدينة المنورة",
+        "جدة",
+        "القصيم",
+        "الشرقية",
+        "ابها",
+        "تبوك",
+        "حائل",
+        "جازان",
+        "نجران",
+        "الباحة",
+        "الجوف",
+        "الاحساء",
+        "حفر الباطن",
+        
+ ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        eventKindPicker.delegate = self
-        eventKindPicker.dataSource = self
         eventCityPicker.delegate = self
         eventCityPicker.dataSource = self
         searchBer.delegate = self
-        
+        contentView.applyShadow(cornerRadius: 40)
+       
     }
     override func viewWillAppear(_ animated: Bool) {
-        filterEventData(fieldName: "type", equalTo: "event")
+        self.tabBarController?.tabBar.isHidden = false
+        self.filterEventData(fieldName: "type", equalTo: "event")
+      
     }
     
     
@@ -66,21 +71,24 @@ class EventsVC: UIViewController {
             }else {
                 for document in querySnapshot!.documents {
                     let data = document.data()
-                    let eventID = data["eventID"] as? String ?? "nil"
-                    let eventName =  data["eventName"] as? String ?? "nil"
-                    let eventOrganizer =  data["eventOrganizer"] as? String ?? "nil"
-                    let eventDescription =  data["eventDescription"] as? String ?? "nil"
+                    let eventID = data["eventID"] as? String ?? "لايوجد"
+                    let eventName =  data["eventName"] as? String ?? "لم يحدد"
+                    let eventOrganizer =  data["eventOrganizer"] as? String ?? "لم يحدد"
+                    let eventDescription =  data["eventDescription"] as? String ?? "لايوجد"
                     let eventEmail =  data["eventEmail"] as? String ?? "nil"
-                    let eventCity =  data["eventCity"] as? String ?? "nil"
+                    let eventCity =  data["eventCity"] as? String ?? "لم يحدد"
+                    let eventImage =  data["eventImage"] as? String ?? "nil"
                     let eventPrice =  data["eventPrice"] as? Double ?? 0.0
-                    let newEvent = Event(type: "event", eventID: eventID, eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventPrice: eventPrice)
+                    let newEvent = Event(type: "event", eventID: eventID, eventName: eventName, eventOrganizer: eventOrganizer, eventDescription: eventDescription, eventEmail: eventEmail, eventCity: eventCity, eventImage:eventImage, eventPrice: eventPrice)
                     self.events.append(newEvent)
-                }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    if self.events.isEmpty {
-                        self.tableView.setEmptyMessage("لايوجد فعاليات")
+                    self.alterEvents = self.events
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        if self.events.isEmpty {
+                            self.tableView.setEmptyMessage("لايوجد فعاليات")
+                        }
                     }
+                    
                 }
             }
         }
@@ -105,7 +113,7 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        80
+        110
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedEvent = events[indexPath.row]
@@ -129,43 +137,28 @@ extension EventsVC: UIPickerViewDelegate, UIPickerViewDataSource  {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-      //  if pickerView.tag == 0 {
             return cities.count
-//        } else {
-//            return eventKindArray.count
-//        }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-       // if pickerView.tag == 0 {
             return cities[row]
-//        } else {
-//            return eventKindArray[row]
-//        }
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView.tag == 0 {
+       events = alterEvents
             if cities[row] == "الكل" {
-                //
-            }else {
-               // cities = cities.filter({$0 == cities[row] })
+               filterEventData(fieldName: "type", equalTo: "event")
+            }else  {
+                events = events.filter({$0.eventCity == cities[row] })
             }
-        }
-//        else {
-//            if eventKindArray[row] == "الكل"{
-//                filterEventData(fieldName: "type", equalTo: "event")
-//            }else {
-//                filterEventData(fieldName: "eventKind", equalTo: eventKindArray[row])
-//                // events = events.filter { $0.eventKind == eventKindArray[row]}
-//            }
-//        }
+        tableView.reloadData()
     }
     
 }
 
 //MARK: -UISearchBarDelegate
 extension EventsVC: UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if searchBar.text?.count == 0 {
             filterEventData(fieldName: "type", equalTo: "event")

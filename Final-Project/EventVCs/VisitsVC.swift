@@ -9,7 +9,9 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 
-class VisitsVC: UIViewController {
+
+
+class VisitsVC: UIViewController, UIScrollViewDelegate  {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,7 +27,10 @@ class VisitsVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+        self.view.addTopView(titleLbl: "الزيارات")
         getSchoolVisit()
+       
     }
     
     //MARK: - firebase function
@@ -48,10 +53,8 @@ class VisitsVC: UIViewController {
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                             
                             let date = data["date"] as? String ?? "لم يحدد"
-                            let time = data["time"] as? String ?? "nil"
-                            let duration = data["duration"] as? String ?? "nil"
-                            let budget = data["budget"] as? String ?? "nil"
-                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, time: time, duration: duration, budget: budget, requestStatus: requestStatus)
+                            let totalPrice = data["totalPrice"] as? Double ?? 0
+                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, totalPrice: totalPrice, requestStatus: requestStatus)
                             self.visits.append(newRequest)
                         }
                     }
@@ -80,12 +83,12 @@ extension VisitsVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventVisitCell") as! EventVisitCell
         cell.schoolName.text = visits[indexPath.row].schoolName
         cell.visitDate.text = visits[indexPath.row].date
-        cell.visitBudget.text = visits[indexPath.row].budget
+        cell.visitPrice.text = "\(visits[indexPath.row].totalPrice!)"
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        85
+        100
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRequest = visits[indexPath.row]
@@ -100,3 +103,50 @@ extension VisitsVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//protocol RoundedCornerNavigationBar {
+//    func addRoundedCorner(OnNavigationBar navigationBar: UINavigationBar, cornerRadius: CGFloat)
+//}
+//extension RoundedCornerNavigationBar where Self: UIViewController , RoundedCornerNavigationBar{
+//    func addRoundedCorner(OnNavigationBar navigationBar: UINavigationBar, cornerRadius: CGFloat){
+//
+//        navigationBar.isTranslucent = true
+//        navigationBar.setBackgroundImage(UIImage(), for: .default)
+//        navigationBar.backgroundColor = UIColor(#colorLiteral(red: 0.9669799209, green: 0.9765892625, blue: 0.9980371594, alpha: 1)) //.white
+//        let customView = UIView()
+//
+//        customView.frame = CGRect(x: 0, y: navigationBar.bounds.maxY-5, width: navigationBar.bounds.width, height: 60)
+//
+//        customView.backgroundColor = .clear
+//        navigationBar.insertSubview(customView, at: 1)
+//
+//        let shapeLayer = CAShapeLayer()
+//        shapeLayer.path = UIBezierPath(roundedRect: customView.bounds, byRoundingCorners: [.bottomLeft,.bottomRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).cgPath
+//
+//        shapeLayer.shadowColor = UIColor.lightGray.cgColor
+//        shapeLayer.shadowOffset = CGSize(width: 0, height: 4.0)
+//        shapeLayer.shadowOpacity = 0.8
+//        shapeLayer.shadowRadius = 2
+//        shapeLayer.fillColor = UIColor(#colorLiteral(red: 0.9669799209, green: 0.9765892625, blue: 0.9980371594, alpha: 1)).cgColor //UIColor.white.cgColor
+//        customView.layer.insertSublayer(shapeLayer, at: 0)
+//    }
+//}
+//

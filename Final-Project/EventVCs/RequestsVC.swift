@@ -12,6 +12,7 @@ import FirebaseFirestore
 class RequestsVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    // @IBOutlet weak var topView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -25,15 +26,15 @@ class RequestsVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+        self.view.addTopView(titleLbl: "الطلبات")
         getSchoolRequest()
-        
     }
     
     //MARK: - firebase function
     func getSchoolRequest() {
         if let userId = userId {
-            
-            db.collection("Requests").whereField("eventID", isEqualTo: userId).getDocuments { querySnapshot, error in
+            db.collection("Requests").order(by: "requestDate", descending: true).whereField("eventID", isEqualTo: userId).addSnapshotListener { querySnapshot, error in
                 self.requests = []
                 if let error = error {
                     print("Error: ",error.localizedDescription)
@@ -47,12 +48,9 @@ class RequestsVC: UIViewController {
                             let schoolName = data["schoolName"] as? String ?? "nil"
                             let eventName = data["eventName"] as? String ?? "nil"
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
-                            
                             let date = data["date"] as? String ?? "لم يحدد"
-                            let time = data["time"] as? String ?? "nil"
-                            let duration = data["duration"] as? String ?? "nil"
-                            let budget = data["budget"] as? String ?? "nil"
-                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, time: time, duration: duration, budget: budget, requestStatus: requestStatus)
+                            let totalPrice = data["totalPrice"] as? Double ?? 0
+                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, totalPrice: totalPrice, requestStatus: requestStatus)
                             self.requests.append(newRequest)
                         }
                     }
@@ -60,12 +58,12 @@ class RequestsVC: UIViewController {
                         self.tableView.reloadData()
                         if self.requests.isEmpty {
                             self.tableView.setEmptyMessage("لايوجد طلبات")
+                            self.tableView.reloadData()
                         }
                     }
-                    
                 }
             }
-        }
+        }  
     }
 }
 
@@ -79,24 +77,25 @@ extension RequestsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "schoolRequestCell") as! SchoolRequestCell
-            cell.schoolName.text = requests[indexPath.row].schoolName
+        cell.viewCell.applyShadow(cornerRadius: 20)
+        cell.schoolName.text = requests[indexPath.row].schoolName
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        65
+        75
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedRequest = requests[indexPath.row]
-         performSegue(withIdentifier: "moreRequestDetails", sender: nil)
+        performSegue(withIdentifier: "moreRequestDetails", sender: nil)
     }
     
-        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            if segue.identifier == "moreRequestDetails" {
-                let nextVc = segue.destination as! RequestDetailsVC
-                nextVc.selectedRequest = selectedRequest
-            }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "moreRequestDetails" {
+            let nextVc = segue.destination as! RequestDetailsVC
+            nextVc.selectedRequest = selectedRequest
         }
+    }
 }
 
 //MARK: -UITableView
@@ -109,11 +108,11 @@ extension UITableView {
         messageLabel.textAlignment = .center
         messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
         messageLabel.sizeToFit()
-
+        
         self.backgroundView = messageLabel
         self.separatorStyle = .none
     }
-
+    
     func restore() {
         self.backgroundView = nil
         self.separatorStyle = .singleLine
@@ -121,3 +120,38 @@ extension UITableView {
 }
 
 
+
+
+
+//        if let userId = userId {
+//            db.collection("Requests").whereField("eventID", isEqualTo: userId).getDocuments { querySnapshot, error in
+//                self.requests = []
+//                if let error = error {
+//                    print("Error: ",error.localizedDescription)
+//                }else {
+//                    for document in querySnapshot!.documents {
+//                        let data = document.data()
+//                        let requestStatus = data["requestStatus"] as? String ?? "nil"
+//                        if requestStatus == "انتظار" {
+//                            let requestID = data["requestID"] as? String ?? "nil"
+//                            let schoolID = data["schoolID"] as? String ?? "nil"
+//                            let schoolName = data["schoolName"] as? String ?? "nil"
+//                            let eventName = data["eventName"] as? String ?? "nil"
+//                            let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
+//
+//                            let date = data["date"] as? String ?? "لم يحدد"
+//                            let totalPrice = data["totalPrice"] as? Double ?? 0
+//                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, totalPrice: totalPrice, requestStatus: requestStatus)
+//                            self.requests.append(newRequest)
+//                        }
+//                    }
+//                    DispatchQueue.main.async {
+//                        self.tableView.reloadData()
+//                        if self.requests.isEmpty {
+//                            self.tableView.setEmptyMessage("لايوجد طلبات")
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }

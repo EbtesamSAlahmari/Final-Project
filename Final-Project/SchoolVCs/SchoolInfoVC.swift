@@ -18,41 +18,66 @@ class SchoolInfoVC: UIViewController {
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var editBtn: UIButton!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
+    var editStatus = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tabBarController?.tabBar.isHidden = true
+        contentView.applyShadow(cornerRadius: 20)
         DispatchQueue.main.async {
             self.getSchoolData()
         }
     }
     
-    @IBAction func editSchoolInfo(_ sender: Any) {
-        nameTxt.isUserInteractionEnabled = true
-        schoolDescription.isUserInteractionEnabled = true
-        phone.isUserInteractionEnabled = true
-        
-        saveBtn.isHidden = false
-        cancelBtn.isHidden = false
-        nameTxt.backgroundColor = .white
-        schoolDescription.backgroundColor = .white
-        phone.backgroundColor = .white
+    override func viewWillAppear(_ animated: Bool) {
+        updateView(state: false, hidden: true, color: .white)
     }
     
-    @IBAction func detectLocation(_ sender: Any) {
-        
+    override func viewWillDisappear(_ animated: Bool) {
+        updateView(state: false, hidden: true, color: .white)
+    }
+    
+    @IBAction func editSchoolInfo(_ sender: Any) {
+        if editStatus {
+            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 1)))
+            editStatus = false
+        }else{
+            updateView(state: false, hidden: true, color: .white)
+            editStatus = true
+        }
     }
     
     @IBAction func savePressed(_ sender: Any) {
         updateSchoolData()
+        updateView(state: false, hidden: true, color: .white)
         navigationController?.popViewController(animated: true)
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
     }
+    
+    func updateView(state: Bool, hidden: Bool, color: UIColor) {
+        
+        nameTxt.isUserInteractionEnabled = state
+        schoolDescription.isUserInteractionEnabled = state
+        phone.isUserInteractionEnabled = state
+        
+        saveBtn.isHidden = hidden
+        cancelBtn.isHidden = hidden
+        nameTxt.backgroundColor = color
+        schoolDescription.backgroundColor = color
+        phone.backgroundColor = color
+        
+        state ? editBtn.setImage(UIImage(systemName: "checkmark.square"), for: .normal) :
+        editBtn.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
+    }
+    
     
     //MARK: - firebase functions
     
@@ -63,10 +88,10 @@ class SchoolInfoVC: UIViewController {
                     print("Error: ",error.localizedDescription)
                 }else {
                     self.nameTxt.text = documentSnapshot?.get("schoolName") as? String
-                    self.schoolDescription.text = documentSnapshot?.get("schoolDescription") as? String
-                    self.phone.text = documentSnapshot?.get("schoolPhone") as? String
+                    self.schoolDescription.text = documentSnapshot?.get("schoolDescription") as? String ?? "لايوجد وصف"
+                    self.phone.text = documentSnapshot?.get("schoolPhone") as? String ?? "لايوجد"
                     self.email.text = documentSnapshot?.get("schoolEmail") as? String
-                    self.location.text = documentSnapshot?.get("schoolLocation") as? String
+                    self.location.text = documentSnapshot?.get("schoolLocation") as? String ?? "لم يحدد"
                 }
             }
         }

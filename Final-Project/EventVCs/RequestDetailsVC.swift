@@ -10,7 +10,7 @@ import Firebase
 import FirebaseFirestore
 import GoogleMaps
 
-class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
+class RequestDetailsVC: UIViewController {
 
     @IBOutlet weak var nameTxt: UILabel!
     @IBOutlet weak var schoolDescription: UILabel!
@@ -18,11 +18,12 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var dateTxt: UILabel!
-    @IBOutlet weak var timeTxt: UILabel!
-    @IBOutlet weak var duration: UILabel!
-    @IBOutlet weak var budget: UILabel!
+    @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var acceptRequestBtn: UIButton!
     @IBOutlet weak var refuseRequestBtn: UIButton!
+    
+    
+    @IBOutlet weak var contentView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -35,38 +36,31 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        location.requestWhenInUseAuthorization()
-        location.startUpdatingLocation()
-       // mapView.delegate = self
-       location.delegate = self
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         loadRequest()
         nameTxt.text = selectedRequest?.schoolName
-        
         dateTxt.text = selectedRequest?.date
-        timeTxt.text = selectedRequest?.time
-        duration.text = selectedRequest?.duration
-        budget.text = selectedRequest?.budget
+        priceLbl.text = "\((selectedRequest?.totalPrice)!)"
         
         if vcNum == 2 {
             acceptRequestBtn.isHidden = true
             refuseRequestBtn.isHidden = true
         }
         
+        contentView.applyShadow(cornerRadius: 20)
     }
     
     @IBAction func acceptRequestPressed(_ sender: Any) {
         updateRequestStatus(status: "مقبولة")
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarE") as! UITabBarController
-        self.present(vc, animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func refuseRequestPressed(_ sender: Any) {
         updateRequestStatus(status: "مرفوضة")
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarE") as! UITabBarController
-        self.present(vc, animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func showSchoolLocation(_ sender: Any) {

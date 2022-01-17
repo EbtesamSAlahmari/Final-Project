@@ -20,35 +20,45 @@ class SignUpVC: UIViewController {
     
     let db = Firestore.firestore()
     var selectedType = "event"
-  
+    var flag = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        eventType.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
     }
     
     @IBAction func signUpPressed(_ sender: Any) {
-        Auth.auth().createUser(withEmail: emailTxt.text!, password: passwordTxt.text!) { user, error in
-            if let error = error {
-                let alert = UIAlertController(title: "تنبيه", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "حسناً", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }else{
-                if self.selectedType == "school" {
-                    self.addSchool(documentId:(user?.user.uid)!)
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarS") as! UITabBarController
-                    self.present(vc, animated: true, completion: nil)
-                }else {
-                    self.addEvent(documentId:(user?.user.uid)!)
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarE") as! UITabBarController
-                    self.present(vc, animated: true, completion: nil)
+        if passwordTxt.text != rePasswordTxt.text {
+            
+            let alertController = UIAlertController(title: "غير متطابقة", message: "كلمة المرور غير متطابقة", preferredStyle: .alert)
+            let defaultAction = UIAlertAction(title:  "حسنا" , style: .cancel, handler: nil)
+            alertController.addAction(defaultAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
+        else {
+            Auth.auth().createUser(withEmail: emailTxt.text!, password: passwordTxt.text!) { user, error in
+                if let error = error {
+                    let alert = UIAlertController(title: "تنبيه", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "حسناً", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }else{
+                    if self.selectedType == "school" {
+                        self.addSchool(documentId:(user?.user.uid)!)
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarS") as! UITabBarController
+                        self.present(vc, animated: true, completion: nil)
+                    }else {
+                        self.addEvent(documentId:(user?.user.uid)!)
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "tabBarE") as! UITabBarController
+                        self.present(vc, animated: true, completion: nil)
+                    }
                 }
             }
         }
     }
     
     @IBAction func privacyPolicyPressed(_ sender: Any) {
-        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "privacyPolicyVC") as! PrivacyPolicyVC
+        self.present(vc, animated: true, completion: nil)
     }
     
     @IBAction func signInPressed(_ sender: Any) {
@@ -60,22 +70,24 @@ class SignUpVC: UIViewController {
     
     @IBAction func schoolChoice(_ sender: UIButton) {
         changeStatusBtn(sender)
-        eventType.setImage(UIImage(systemName: "squareshape"), for: .normal)
         selectedType = "school"
     }
     
     @IBAction func eventChoice(_ sender: UIButton) {
         changeStatusBtn(sender)
         selectedType = "event"
-        schoolType.setImage(UIImage(systemName: "squareshape"), for: .normal)
+        
     }
     
     func changeStatusBtn(_ button: UIButton) {
-        if button.currentImage == UIImage(systemName: "squareshape") {
-            button.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
-            
+        if flag {
+            eventType.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+            schoolType.setImage(UIImage(systemName: "squareshape"), for: .normal)
+            flag = false
         }else {
-            button.setImage(UIImage(systemName: "squareshape"), for: .normal)
+            eventType.setImage(UIImage(systemName: "squareshape"), for: .normal)
+            schoolType.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+            flag = true
         }
     }
     
@@ -87,10 +99,7 @@ class SignUpVC: UIViewController {
                 "type": "school",
                 "schoolID": documentId,
                 "schoolName": nameTxt.text ?? "مدرسة....",
-                "schoolDescription": "",
-                "schoolPhone": "",
-                "schoolEmail": emailTxt.text! ,
-                "schoolLocation": ""
+                "schoolEmail": emailTxt.text!
             ]
         )
         {(error) in
@@ -109,12 +118,7 @@ class SignUpVC: UIViewController {
                 "type": "event",
                 "eventID": documentId,
                 "eventName": nameTxt.text ?? "فعالية....",
-                "eventOrganizer": "",
-                "eventDescription": "",
-                "eventEmail": emailTxt.text! ,
-                "eventCity": "",
-                "eventKind": "",
-                "eventImage": ""
+                "eventEmail": emailTxt.text!
             ]
         )
         {(error) in
