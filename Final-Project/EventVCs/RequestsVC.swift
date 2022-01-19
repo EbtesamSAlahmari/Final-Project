@@ -121,7 +121,7 @@ extension UITableView {
         messageLabel.textColor = .gray
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name: "TrebuchetMS", size: 15)
+        messageLabel.font = UIFont(name: "Tajawal-Medium", size: 15)
         messageLabel.sizeToFit()
         
         self.backgroundView = messageLabel
@@ -134,39 +134,3 @@ extension UITableView {
     }
 }
 
-
-
-
-
-//        if let userId = userId {
-//            db.collection("Requests").whereField("eventID", isEqualTo: userId).getDocuments { querySnapshot, error in
-//                self.requests = []
-//                if let error = error {
-//                    print("Error: ",error.localizedDescription)
-//                }else {
-//                    for document in querySnapshot!.documents {
-//                        let data = document.data()
-//                        let requestStatus = data["requestStatus"] as? String ?? "nil"
-//                        if requestStatus == "انتظار" {
-//                            let requestID = data["requestID"] as? String ?? "nil"
-//                            let schoolID = data["schoolID"] as? String ?? "nil"
-//                            let schoolName = data["schoolName"] as? String ?? "nil"
-//                            let eventName = data["eventName"] as? String ?? "nil"
-//                            let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
-//
-//                            let date = data["date"] as? String ?? "لم يحدد"
-//                            let totalPrice = data["totalPrice"] as? Double ?? 0
-//                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, totalPrice: totalPrice, requestStatus: requestStatus)
-//                            self.requests.append(newRequest)
-//                        }
-//                    }
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                        if self.requests.isEmpty {
-//                            self.tableView.setEmptyMessage("لايوجد طلبات")
-//                        }
-//                    }
-//
-//                }
-//            }
-//        }

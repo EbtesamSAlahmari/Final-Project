@@ -126,7 +126,7 @@ class SchoolProfileVC: UIViewController {
         var endDate = dateFormatter.date(from: endDateStr)
         
         let calendar = NSCalendar.current
-        var diffDate = calendar.dateComponents([.day], from: Date() , to: calendar.startOfDay(for: endDate!)).day!
+        var diffDate = calendar.dateComponents([.day], from: Date() , to: calendar.startOfDay(for: endDate ?? Date())).day!
         return diffDate
     }
 }

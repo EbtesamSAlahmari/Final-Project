@@ -26,6 +26,7 @@ class SettingVC: UIViewController {
         self.tabBarController?.tabBar.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
+        //UILabel.appearance().font = UIFont(name: "Tajawal-Regular", size: 17)
     }
     
     @IBAction func signOutPressed(_ sender: Any) {

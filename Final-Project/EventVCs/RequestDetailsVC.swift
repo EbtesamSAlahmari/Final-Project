@@ -38,6 +38,7 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
         self.tabBarController?.tabBar.isHidden = true
         mapView.delegate = self
         location.delegate = self
+        mapView.settings.consumesGesturesInView = false
     }
     
     override func viewWillAppear(_ animated: Bool) {

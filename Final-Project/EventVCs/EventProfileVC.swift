@@ -104,7 +104,16 @@ class EventProfileVC: UIViewController {
         editBtn.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
     }
     
-    
+//    func number(num: String) {
+//        let numberStr: String = num
+//        let formatter: NumberFormatter = NumberFormatter()
+//        formatter.locale = NSLocale(localeIdentifier: "EN") as Locale?
+//        formatter.allowsFloats = true
+//        formatter.numberStyle = .decimal
+//        let final = formatter.number(from: numberStr)
+//        let doubleNumber = Double(final!)
+//        print("\(doubleNumber)")
+//    }
     
     //MARK: - firebase function
     func getEventData() {
@@ -145,7 +154,7 @@ class EventProfileVC: UIViewController {
                 "eventOrganizer" : self.eventOrganizerTxt.text ?? "لايوجد" ,
                 "eventDescription": self.eventDescriptionTxt.text ?? "الوصف لايوجد" ,
                 "eventCity" : self.eventCityTxt.text ?? "لم يحدد" ,
-                "eventPrice" : Double(self.eventPriceTxt.text ?? "") ?? 0.0 ,
+                "eventPrice" : Double(self.eventPriceTxt.text?.arToEnDigits() ?? "") ?? 0.0 ,
 
             ])
             {(error) in
@@ -230,5 +239,16 @@ extension EventProfileVC: UITextViewDelegate  {
                 constraint.constant = estimatedSize.height
             }
         }
+    }
+}
+
+
+
+extension String {
+   func arToEnDigits() -> String {
+        let arabicNumbers = ["٠": "0","١": "1","٢": "2","٣": "3","٤": "4","٥": "5","٦": "6","٧": "7","٨": "8","٩": "9","٫": "."]
+        var txt = self
+        arabicNumbers.map { txt = txt.replacingOccurrences(of: $0, with: $1)}
+        return txt
     }
 }

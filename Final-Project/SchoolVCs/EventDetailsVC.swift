@@ -24,9 +24,9 @@ class EventDetailsVC: UIViewController {
     @IBOutlet weak var eventDescriptionLbl: UILabel!
     @IBOutlet weak var subView: UIView!
     @IBOutlet weak var secondSubView: UIView!
-    @IBOutlet weak var isOneDay: UISwitch!
     @IBOutlet weak var fromDateStack: UIStackView!
     @IBOutlet weak var toLbl: UILabel!
+    
     
     var selectedEvent:Event?
     var selectedRequestEvent:RequestEvent?
@@ -42,7 +42,8 @@ class EventDetailsVC: UIViewController {
     var oneDay = false
     var totalPrice:Double?
     var imageStr = ""
-    var schoolRequestTotalPrice = ""
+   // var schoolRequestTotalPrice = ""
+    var isOneDay = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,10 +73,6 @@ class EventDetailsVC: UIViewController {
             self.loadImage(imgStr: imgStr ?? "nil" )
             self.imageStr = imgStr ?? "nil"
         }
-//        if vcNum == 2 {
-//            getEventData()
-//            sendRequestBtn.isHidden = true
-//        }
     }
     
     @IBAction func datePickerChanged(_ sender: UIDatePicker) {
@@ -107,25 +104,27 @@ class EventDetailsVC: UIViewController {
             self.totalPriceLbl.text = "\(self.totalPrice!)"
         }
     }
-   
-    @IBAction func isOneDayAction(_ sender: UISwitch) {
-        if isOneDay.isOn {
-            fromDateStack.isHidden = true
-            toLbl.isHidden = true
-            oneDay = true
-        }else {
-            fromDateStack.isHidden = false
-            toLbl.isHidden = false
-            oneDay = false
-        }
-    }
-    
-    
+ 
     @IBAction func requestPressed(_ sender: Any) {
         addRequest()
         navigationController?.popViewController(animated: true)
     }
 
+    @IBAction func dayOne(_ sender: UIButton) {
+        if isOneDay {
+            fromDateStack.isHidden = true
+            toLbl.isHidden = true
+            oneDay = true
+            isOneDay = false
+            sender.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+        }else {
+            fromDateStack.isHidden = false
+            toLbl.isHidden = false
+            oneDay = false
+            isOneDay = true
+            sender.setImage(UIImage(systemName: "square"), for: .normal)
+        }
+    }
     
  
     
@@ -144,7 +143,6 @@ class EventDetailsVC: UIViewController {
             "eventOrganizer": selectedEvent?.eventOrganizer,
             "startDate" : startDateStr ?? "لم يحدد" ,
             "endDate" : endDateStr ?? "لم يحدد" ,
-            //"date": selectedDate ?? "لم يحدد",
             "totalPrice": totalPrice ,
             "requestStatus": "انتظار"
         ] as [String : Any]
@@ -183,38 +181,4 @@ class EventDetailsVC: UIViewController {
             }
         }
     }
-    
-    
-    
-//
-//    func getEventData() {
-//        db.collection("Users").whereField("eventID", isEqualTo: (selectedRequestEvent?.eventID)!).getDocuments {
-//            querySnapshot, error in
-//            if let error = error {
-//                print("Error: ",error.localizedDescription)
-//            }else {
-//                for document in querySnapshot!.documents {
-//                    let data = document.data()
-//                    self.nameLbl.text = data["eventName"] as? String ?? "لم يحدد"
-//                    self.eventOrganizerLbl.text = data["eventOrganizer"] as? String ?? "لم يحدد"
-//                    self.eventDescriptionLbl.text =  data["eventDescription"] as? String ?? "لايوجد"
-//                    self.eventEmailLbl.text = data["eventEmail"] as? String ?? "nil"
-//                    self.eventCityLbl.text = data["eventCity"] as? String ?? "لم يحدد"
-//                    self.eventPrice.text = "\(data["eventPrice"] as? Double  ?? 0)" + "ريال" + " لليوم الواحد"
-//                    self.totalPriceLbl.text = "\((self.selectedRequestEvent?.totalPrice)!)" + "ريال "
-//                    let eventImage =  data["eventImage"] as? String ?? "nil"
-//                    if eventImage == "nil" {
-//                        self.eventImage.image = UIImage(systemName: "photo")
-//                    }
-//                    else {
-//                        self.loadImage(imgStr: eventImage ?? "nil" )
-//                        self.imageStr = eventImage ?? "nil"
-//                    }
-//                }
-//            }
-//        }
-//    }
-
 }
-
-

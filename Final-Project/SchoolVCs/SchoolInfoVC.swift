@@ -38,7 +38,7 @@ class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDeleg
         
         mapView.delegate = self
         location.delegate = self
-       
+        nameTxt.font = UIFont.boldSystemFont(ofSize: 20)
         self.getSchoolData()
     }
     

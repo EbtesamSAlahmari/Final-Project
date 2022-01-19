@@ -176,6 +176,20 @@ extension EventsVC: UIPickerViewDelegate, UIPickerViewDataSource  {
         tableView.reloadData()
     }
     
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        
+        var title = UILabel()
+        if let view = view {
+            title = view as! UILabel
+        }
+        title.font = UIFont(name: "Tajawal-Regular", size: 14)
+        title.textColor = UIColor.black
+        title.text =  cities[row]
+        title.textAlignment = .center
+        
+        return title
+    }
+    
 }
 
 //MARK: -UISearchBarDelegate

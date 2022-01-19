@@ -60,7 +60,7 @@ class SchoolRequestsVC: UIViewController {
                     self.eventDescriptionLbl.text =  data["eventDescription"] as? String ?? "لايوجد"
                     self.eventEmailLbl.text = data["eventEmail"] as? String ?? "nil"
                     self.eventCityLbl.text = data["eventCity"] as? String ?? "لم يحدد"
-                    self.eventPrice.text = "\(data["eventPrice"] as? Double  ?? 0)" + "ريال" + " لليوم الواحد"
+                    self.eventPrice.text = "\(data["eventPrice"] as? Double  ?? 0)" + "ريال" + " /لليوم الواحد"
                     self.totalPriceLbl.text = "\((self.selectedRequestEvent?.totalPrice)!)" + "ريال "
                     self.startDateLbl.text = self.selectedRequestEvent?.startDate
                     self.endDateLbl.text = self.selectedRequestEvent?.endDate
