@@ -18,7 +18,8 @@ class SignInVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        emailTxt.setLeftImage(imageName: "envelope")
+        passwordTxt.setLeftImage(imageName: "lock")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,6 +82,6 @@ class SignInVC: UIViewController {
             }
         }
     }
-    
+   
 }
 

@@ -8,34 +8,43 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import GoogleMaps
 
-class SchoolInfoVC: UIViewController {
+class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
     @IBOutlet weak var nameTxt: UITextField!
     @IBOutlet weak var schoolDescription: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var email: UITextField!
-    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var editBtn: UIButton!
+    @IBOutlet weak var mapView: GMSMapView!
+
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
     var editStatus = true
+    let location = CLLocationManager()
+    var locationLat:CLLocationDegrees?
+    var locationLon:CLLocationDegrees?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
         contentView.applyShadow(cornerRadius: 20)
-        DispatchQueue.main.async {
-            self.getSchoolData()
-        }
+        
+        mapView.delegate = self
+        location.delegate = self
+       
+        self.getSchoolData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         updateView(state: false, hidden: true, color: .white)
+        mapView.applyShadow(cornerRadius: 20)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -44,7 +53,7 @@ class SchoolInfoVC: UIViewController {
     
     @IBAction func editSchoolInfo(_ sender: Any) {
         if editStatus {
-            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 1)))
+            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)) )
             editStatus = false
         }else{
             updateView(state: false, hidden: true, color: .white)
@@ -60,6 +69,19 @@ class SchoolInfoVC: UIViewController {
     
     @IBAction func cancelPressed(_ sender: Any) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    
+    @IBAction func detectLocationPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "toMapVC", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toMapVC" {
+            let nextVc = segue.destination as! MapVC
+            nextVc.selectedLatitude = locationLat
+            nextVc.selectedLongitude = locationLon
+        }
     }
     
     func updateView(state: Bool, hidden: Bool, color: UIColor) {
@@ -91,7 +113,17 @@ class SchoolInfoVC: UIViewController {
                     self.schoolDescription.text = documentSnapshot?.get("schoolDescription") as? String ?? "لايوجد وصف"
                     self.phone.text = documentSnapshot?.get("schoolPhone") as? String ?? "لايوجد"
                     self.email.text = documentSnapshot?.get("schoolEmail") as? String
-                    self.location.text = documentSnapshot?.get("schoolLocation") as? String ?? "لم يحدد"
+                    self.locationLbl.text =  documentSnapshot?.get("schoolLocation") as? String ?? "لم يحدد" + "الموقع"
+                    let loca = documentSnapshot?.get("loca") as? [String: Any]
+                    self.locationLat = loca?["Latitude"] as? Double ?? 0.0
+                    self.locationLon = loca?["Longitude"] as? Double ?? 0.0
+                    
+                    let marker = GMSMarker()
+                    let camera = GMSCameraPosition(latitude: self.locationLat!, longitude: self.locationLon!, zoom: 17.0)
+                    let coordinate = CLLocationCoordinate2D(latitude: self.locationLat! , longitude: self.locationLon!)
+                    marker.position = coordinate
+                    marker.map = self.mapView
+                    self.mapView.animate(to: camera)
                 }
             }
         }

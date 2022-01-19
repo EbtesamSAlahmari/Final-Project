@@ -20,6 +20,8 @@ class MapVC: UIViewController {
     var userId = Auth.auth().currentUser?.uid
     var locationLat:CLLocationDegrees?
     var locationLon:CLLocationDegrees?
+    var selectedLatitude:CLLocationDegrees?
+    var selectedLongitude:CLLocationDegrees?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +32,18 @@ class MapVC: UIViewController {
         location.delegate = self
         mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
+        
+        
+        let camera = GMSCameraPosition(latitude: self.selectedLatitude!, longitude: self.selectedLongitude!, zoom: 17.0)
+        self.mapView.animate(to: camera)
+        
     }
     
     @IBAction func addLocationPressed(_ sender: Any) {
         updateSchoolData()
         navigationController?.popViewController(animated: true)
     }
+    
     func updateSchoolData() {
         if let userId = userId {
             let loca: [String: Any] = [
@@ -69,6 +77,7 @@ extension MapVC: CLLocationManagerDelegate, GMSMapViewDelegate  {
             self.mapView.animate(to: camera)
         }
     }
+    
     //add location text to lable
     func myLocation(coordinates: CLLocationCoordinate2D) {
         let geocoder = GMSGeocoder()

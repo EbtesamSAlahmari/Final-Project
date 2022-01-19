@@ -25,6 +25,10 @@ class SignUpVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         eventType.setImage(UIImage(systemName: "checkmark.square"), for: .normal)
+        nameTxt.setLeftImage(imageName: "")
+        emailTxt.setLeftImage(imageName: "envelope")
+        passwordTxt.setLeftImage(imageName: "lock")
+        rePasswordTxt.setLeftImage(imageName: "lock")
     }
     
     @IBAction func signUpPressed(_ sender: Any) {

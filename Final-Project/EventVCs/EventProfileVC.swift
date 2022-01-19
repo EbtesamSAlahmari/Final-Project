@@ -21,8 +21,8 @@ class EventProfileVC: UIViewController {
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var settingBtn: UIButton!
     @IBOutlet weak var editBtn: UIButton!
-    
     @IBOutlet weak var contentView: UIView!
+    
     let imagePicker = UIImagePickerController()
     
     let db = Firestore.firestore()
@@ -34,6 +34,8 @@ class EventProfileVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker.delegate = self
+        eventDescriptionTxt.delegate = self
+        eventDescriptionTxt.isScrollEnabled = false
         settingBtn.applyCornerRadius()
         editBtn.applyCornerRadius()
         contentView.applyShadow(cornerRadius: 20)
@@ -59,7 +61,7 @@ class EventProfileVC: UIViewController {
     
     @IBAction func editPressed(_ sender: Any) {
         if editStatus {
-            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 1)))
+            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
             editStatus = false
         }else{
             updateView(state: false, hidden: true, color: .white)
@@ -76,7 +78,6 @@ class EventProfileVC: UIViewController {
     @IBAction func tapGestureRecognizer(_ sender: UITapGestureRecognizer) {
         if sender.state == .ended {
             sender.numberOfTapsRequired = 1
-            print("-------------===============")
             imagePicker.sourceType = .photoLibrary
             present(imagePicker, animated: true, completion: nil)
         }
@@ -163,11 +164,10 @@ class EventProfileVC: UIViewController {
         let url = "gs://final-project-e67fe.appspot.com/images/" + "\(imgStr)"
         let Ref = Storage.storage().reference(forURL: url)
         Ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if error != nil {
+            if let error = error {
+                print("=======================")
                 print("Error: Image could not download!")
-                print("===================")
-                print(error?.localizedDescription)
-                
+                print(error.localizedDescription)
             } else {
                 self.eventImage.image = UIImage(data: data!)
             }
@@ -217,5 +217,18 @@ extension EventProfileVC: UIImagePickerControllerDelegate & UINavigationControll
         eventImage.image = pickedImage
         updateEventImage()
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+//MARK: -UITextViewDelegate
+extension EventProfileVC: UITextViewDelegate  {
+     func textViewDidChange(_ textView: UITextView) {
+        let size = CGSize(width: view.frame.width, height: .infinity)
+        let estimatedSize = eventDescriptionTxt.sizeThatFits(size)
+         eventDescriptionTxt.constraints.forEach { constraint in
+            if constraint.firstAttribute == .height {
+                constraint.constant = estimatedSize.height
+            }
+        }
     }
 }

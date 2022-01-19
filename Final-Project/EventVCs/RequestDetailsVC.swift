@@ -10,19 +10,18 @@ import Firebase
 import FirebaseFirestore
 import GoogleMaps
 
-class RequestDetailsVC: UIViewController {
+class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
 
     @IBOutlet weak var nameTxt: UILabel!
     @IBOutlet weak var schoolDescription: UILabel!
     @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var email: UILabel!
-    @IBOutlet weak var locationLbl: UILabel!
-    @IBOutlet weak var dateTxt: UILabel!
+    @IBOutlet weak var startDateTxt: UILabel!
+    @IBOutlet weak var endDateTxt: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var acceptRequestBtn: UIButton!
     @IBOutlet weak var refuseRequestBtn: UIButton!
-    
-    
+    @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var contentView: UIView!
     
     let db = Firestore.firestore()
@@ -37,12 +36,15 @@ class RequestDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
+        mapView.delegate = self
+        location.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         loadRequest()
         nameTxt.text = selectedRequest?.schoolName
-        dateTxt.text = selectedRequest?.date
+        startDateTxt.text = selectedRequest?.startDate
+        endDateTxt.text = selectedRequest?.endDate
         priceLbl.text = "\((selectedRequest?.totalPrice)!)"
         
         if vcNum == 2 {
@@ -51,6 +53,9 @@ class RequestDetailsVC: UIViewController {
         }
         
         contentView.applyShadow(cornerRadius: 20)
+        mapView.applyShadow(cornerRadius: 20)
+        
+        
     }
     
     @IBAction func acceptRequestPressed(_ sender: Any) {
@@ -62,9 +67,14 @@ class RequestDetailsVC: UIViewController {
         updateRequestStatus(status: "مرفوضة")
         navigationController?.popViewController(animated: true)
     }
+
     
-    @IBAction func showSchoolLocation(_ sender: Any) {
-        performSegue(withIdentifier: "showLocation", sender: nil)
+    @IBAction func showSchoolLocation(_ sender: UITapGestureRecognizer) {
+       if sender.state == .ended {
+            sender.numberOfTapsRequired = 1
+            performSegue(withIdentifier: "showLocation", sender: nil)
+            print("-----------==============")
+       }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -74,7 +84,7 @@ class RequestDetailsVC: UIViewController {
             nextVc.selectedLon = self.locationLon
         }
     }
-    
+   
  
 //MARK:  -get specific documents from a collection
     func loadRequest() {
@@ -87,10 +97,18 @@ class RequestDetailsVC: UIViewController {
                     self.schoolDescription.text = data["schoolDescription"] as? String ?? "لايوجد"
                     self.phone.text = data["schoolPhone"] as? String ?? "لايوجد"
                     self.email.text = data["schoolEmail"] as? String ?? "لايوجد"
-                    self.locationLbl.text = data["schoolLocation"] as? String ?? "لم يحدد"
+                    //self.locationLbl.text = data["schoolLocation"] as? String ?? "لم يحدد"
                     let loca = data["loca"] as? [String: Any]
                     self.locationLat = loca?["Latitude"] as? Double ?? 0.0
                     self.locationLon = loca?["Longitude"] as? Double ?? 0.0
+                    
+                    let marker = GMSMarker()
+                    let camera = GMSCameraPosition(latitude: self.locationLat!, longitude: self.locationLon!, zoom: 17.0)
+                    let coordinate = CLLocationCoordinate2D(latitude: self.locationLat! , longitude: self.locationLon!)
+                    marker.position = coordinate
+                    marker.map = self.mapView
+                    self.mapView.animate(to: camera)
+                    
                 }
                 
             }
@@ -119,6 +137,4 @@ class RequestDetailsVC: UIViewController {
         }
     }
 }
-
-
 

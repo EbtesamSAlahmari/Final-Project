@@ -14,19 +14,20 @@ class SchoolProfileVC: UIViewController {
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var descriptionLbl: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var topView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
     var schools = [School]()
     var requests = [RequestEvent]()
    lazy var alterRequests = [RequestEvent]()
+    var selectedRequestEvent:RequestEvent?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        contentView.applyShadow(cornerRadius: 40)
+        topView.applyShadow(cornerRadius: 40)
       
     }
     
@@ -75,8 +76,9 @@ class SchoolProfileVC: UIViewController {
     }
     
     func getRequest() {
+        //.order(by: "requestDate", descending: true)
         if let userId = userId {
-            db.collection("Requests").order(by: "requestDate", descending: true).whereField("schoolID", isEqualTo: userId).addSnapshotListener { querySnapshot, error in
+            db.collection("Requests").whereField("schoolID", isEqualTo: userId).addSnapshotListener { querySnapshot, error in
                 self.requests = []
                 if let error = error {
                     print("Error: ",error.localizedDescription)
@@ -88,27 +90,65 @@ class SchoolProfileVC: UIViewController {
                         let eventName = data["eventName"] as? String ?? "nil"
                         let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                         let requestStatus = data["requestStatus"] as? String ?? "nil"
-                        let date = data["date"] as? String ?? "لم يحدد"
+                        //let date = data["date"] as? String ?? "لم يحدد"
                         let totalPrice = data["totalPrice"] as? Double ?? 0
-                        let newRequest = RequestEvent( eventID: eventID, schoolID: userId, requestID: requestID, eventName: eventName, eventOrganizer: eventOrganizer, date: date,totalPrice: totalPrice, requestStatus: requestStatus)
+                        let startDate = data["startDate"] as? String ?? "لم يحدد"
+                        let endDate = data["endDate"]as? String ?? "لم يحدد"
+                        //self.reqID = requestID
+                         let dd = self.calculateDate(endDateStr: endDate)
+                        if dd < 0 {
+                            self.db.collection("Requests").document(requestID).updateData(["requestStatus" : "منتهية"]) { error in
+                                    if error == nil {
+                                        print("update requestStatus  Succ..")
+                                    }else {
+                                        print(error!.localizedDescription)
+                                    }
+                            }
+                        }
+                        
+                        let newRequest = RequestEvent( eventID: eventID, schoolID: userId, requestID: requestID, eventName: eventName, eventOrganizer: eventOrganizer, startDate: startDate, endDate: endDate,totalPrice: totalPrice, requestStatus: requestStatus)
                         self.requests.append(newRequest)
                         self.alterRequests = self.requests
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
-                    if self.requests.isEmpty {
-                        self.tableView.setEmptyMessage("لايوجد طلبات")
-                    }
-                    
                     }
                 }
             }
         }
     }
+    
+   
+    
+    func calculateDate(endDateStr: String) -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        var endDate = dateFormatter.date(from: endDateStr)
+        
+        let calendar = NSCalendar.current
+        var diffDate = calendar.dateComponents([.day], from: Date() , to: calendar.startOfDay(for: endDate!)).day!
+        return diffDate
+    }
 }
 
 //MARK: -UITableView
 extension SchoolProfileVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int
+    {
+        var numOfSections: Int = 0
+        if !requests.isEmpty
+        {
+            numOfSections            = 1
+            tableView.backgroundView = nil
+        }
+        else
+        {
+            self.tableView.setEmptyMessage("لايوجد طلبات")
+        }
+        return numOfSections
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         requests.count
     }
@@ -119,6 +159,7 @@ extension SchoolProfileVC: UITableViewDelegate, UITableViewDataSource {
         cell.eventNameLbl.text = requests[indexPath.row].eventName
         cell.eventTeamLbl.text = requests[indexPath.row].eventOrganizer
         cell.eventStatusLbl.text = requests[indexPath.row].requestStatus
+        
         switch requests[indexPath.row].requestStatus {
         case "انتظار":
             cell.eventStatusLbl.textColor = UIColor(#colorLiteral(red: 0.9688981175, green: 0.8095123768, blue: 0.3056389093, alpha: 1))
@@ -136,5 +177,17 @@ extension SchoolProfileVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         90
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedRequestEvent = requests[indexPath.row]
+        performSegue(withIdentifier: "schoolRequestsVC", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "schoolRequestsVC" {
+            let nextVc = segue.destination as! SchoolRequestsVC
+            nextVc.selectedRequestEvent = selectedRequestEvent
+        }
     }
 }

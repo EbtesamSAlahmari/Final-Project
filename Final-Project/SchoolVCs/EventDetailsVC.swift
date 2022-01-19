@@ -13,7 +13,6 @@ class EventDetailsVC: UIViewController {
     
     @IBOutlet weak var nameLbl: UILabel!
     @IBOutlet weak var eventOrganizerLbl: UILabel!
-    @IBOutlet weak var eventDescriptionLbl: UITextView!
     @IBOutlet weak var eventEmailLbl: UILabel!
     @IBOutlet weak var eventCityLbl: UILabel!
     @IBOutlet weak var eventImage: UIImageView!
@@ -21,28 +20,42 @@ class EventDetailsVC: UIViewController {
     @IBOutlet weak var compactDatePicker: UIDatePicker!
     @IBOutlet weak var totalPriceLbl: UILabel!
     @IBOutlet weak var contView: UIView!
+    @IBOutlet weak var sendRequestBtn: UIButton!
+    @IBOutlet weak var eventDescriptionLbl: UILabel!
+    @IBOutlet weak var subView: UIView!
+    @IBOutlet weak var secondSubView: UIView!
+    @IBOutlet weak var isOneDay: UISwitch!
+    @IBOutlet weak var fromDateStack: UIStackView!
+    @IBOutlet weak var toLbl: UILabel!
     
     var selectedEvent:Event?
+    var selectedRequestEvent:RequestEvent?
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
     var schoolName = ""
     var selectedDate = ""
+    var startDateStr:String?
+    var endDateStr:String?
     var startDate:Date?
     var endDate:Date?
     var days = 1
+    var oneDay = false
     var totalPrice:Double?
     var imageStr = ""
+    var schoolRequestTotalPrice = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
         contView.layer.cornerRadius = 30
         contView.clipsToBounds = true
-        
+        subView.applyShadow(cornerRadius: 20)
+        secondSubView.applyShadow(cornerRadius: 20)
+        navigationController?.hidesBarsOnSwipe = true
     }
-    
-    
+   
     override func viewWillAppear(_ animated: Bool) {
+        //getSchoolRequestID()
         getSchoolData()
         //event info
         self.nameLbl.text = selectedEvent?.eventName
@@ -50,8 +63,7 @@ class EventDetailsVC: UIViewController {
         self.eventDescriptionLbl.text = selectedEvent?.eventDescription
         self.eventEmailLbl.text = selectedEvent?.eventEmail
         self.eventCityLbl.text = selectedEvent?.eventCity
-        self.eventPrice.text = "\(selectedEvent?.eventPrice ?? 0)" + "ريال" + " لليوم الواحد"
-
+        self.eventPrice.text = "\(selectedEvent?.eventPrice ?? 0)" + "ريال" + " /يوم"
         let imgStr = selectedEvent?.eventImage
         if imgStr == "nil" {
             self.eventImage.image = UIImage(systemName: "photo")
@@ -60,7 +72,10 @@ class EventDetailsVC: UIViewController {
             self.loadImage(imgStr: imgStr ?? "nil" )
             self.imageStr = imgStr ?? "nil"
         }
-        
+//        if vcNum == 2 {
+//            getEventData()
+//            sendRequestBtn.isHidden = true
+//        }
     }
     
     @IBAction func datePickerChanged(_ sender: UIDatePicker) {
@@ -68,7 +83,7 @@ class EventDetailsVC: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         startDate = sender.date
-        selectedDate = dateFormatter.string(from: sender.date)
+        startDateStr = dateFormatter.string(from: startDate!)
         
     }
     
@@ -76,18 +91,35 @@ class EventDetailsVC: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         endDate = sender.date
+        endDateStr = dateFormatter.string(from: endDate!)
+        
         let calendar = NSCalendar.current
+        if oneDay == true {
+            startDateStr = dateFormatter.string(from: endDate!)
+            totalPrice = (selectedEvent?.eventPrice)! * 1
+        }
+        else {
         let diffInDays = calendar.dateComponents([.day], from: calendar.startOfDay(for: startDate!) , to: calendar.startOfDay(for: endDate!)).day!
         days = diffInDays + 1
-        selectedDate = dateFormatter.string(from: startDate!) + " - " +  dateFormatter.string(from: endDate!)   // "\(startDate!)" + "\(endDate!)"
         totalPrice = (selectedEvent?.eventPrice)! * Double(days)
+        }
         DispatchQueue.main.async {
             self.totalPriceLbl.text = "\(self.totalPrice!)"
         }
-        
-       //dateFormatter.string(from: sender.date)
     }
    
+    @IBAction func isOneDayAction(_ sender: UISwitch) {
+        if isOneDay.isOn {
+            fromDateStack.isHidden = true
+            toLbl.isHidden = true
+            oneDay = true
+        }else {
+            fromDateStack.isHidden = false
+            toLbl.isHidden = false
+            oneDay = false
+        }
+    }
+    
     
     @IBAction func requestPressed(_ sender: Any) {
         addRequest()
@@ -110,7 +142,9 @@ class EventDetailsVC: UIViewController {
             "eventName": selectedEvent?.eventName,
             "schoolName": schoolName,
             "eventOrganizer": selectedEvent?.eventOrganizer,
-            "date": selectedDate ?? "لم يحدد",
+            "startDate" : startDateStr ?? "لم يحدد" ,
+            "endDate" : endDateStr ?? "لم يحدد" ,
+            //"date": selectedDate ?? "لم يحدد",
             "totalPrice": totalPrice ,
             "requestStatus": "انتظار"
         ] as [String : Any]
@@ -139,10 +173,10 @@ class EventDetailsVC: UIViewController {
         let url = "gs://final-project-e67fe.appspot.com/images/" + "\(imgStr)"
         let Ref = Storage.storage().reference(forURL: url)
         Ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if error != nil {
+            if let error = error {
                 print("Error: Image could not download!")
                 print("===================")
-                print(error?.localizedDescription)
+                print(error.localizedDescription)
                 
             } else {
                 self.eventImage.image = UIImage(data: data!)
@@ -150,5 +184,37 @@ class EventDetailsVC: UIViewController {
         }
     }
     
+    
+    
+//
+//    func getEventData() {
+//        db.collection("Users").whereField("eventID", isEqualTo: (selectedRequestEvent?.eventID)!).getDocuments {
+//            querySnapshot, error in
+//            if let error = error {
+//                print("Error: ",error.localizedDescription)
+//            }else {
+//                for document in querySnapshot!.documents {
+//                    let data = document.data()
+//                    self.nameLbl.text = data["eventName"] as? String ?? "لم يحدد"
+//                    self.eventOrganizerLbl.text = data["eventOrganizer"] as? String ?? "لم يحدد"
+//                    self.eventDescriptionLbl.text =  data["eventDescription"] as? String ?? "لايوجد"
+//                    self.eventEmailLbl.text = data["eventEmail"] as? String ?? "nil"
+//                    self.eventCityLbl.text = data["eventCity"] as? String ?? "لم يحدد"
+//                    self.eventPrice.text = "\(data["eventPrice"] as? Double  ?? 0)" + "ريال" + " لليوم الواحد"
+//                    self.totalPriceLbl.text = "\((self.selectedRequestEvent?.totalPrice)!)" + "ريال "
+//                    let eventImage =  data["eventImage"] as? String ?? "nil"
+//                    if eventImage == "nil" {
+//                        self.eventImage.image = UIImage(systemName: "photo")
+//                    }
+//                    else {
+//                        self.loadImage(imgStr: eventImage ?? "nil" )
+//                        self.imageStr = eventImage ?? "nil"
+//                    }
+//                }
+//            }
+//        }
+//    }
+
 }
+
 

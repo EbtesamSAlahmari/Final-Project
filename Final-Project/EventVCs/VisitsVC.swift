@@ -14,6 +14,7 @@ import FirebaseFirestore
 class VisitsVC: UIViewController, UIScrollViewDelegate  {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var topView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -24,11 +25,11 @@ class VisitsVC: UIViewController, UIScrollViewDelegate  {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        topView.applyShadow(cornerRadius: 40)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        self.view.addTopView(titleLbl: "الزيارات")
         getSchoolVisit()
        
     }
@@ -51,18 +52,16 @@ class VisitsVC: UIViewController, UIScrollViewDelegate  {
                             let schoolName = data["schoolName"] as? String ?? "nil"
                             let eventName = data["eventName"] as? String ?? "nil"
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
-                            
-                            let date = data["date"] as? String ?? "لم يحدد"
+                            let startDate = data["startDate"] as? String ?? "لم يحدد"
+                            let endDate = data["endDate"]as? String ?? "لم يحدد"
+                            //let date = data["date"] as? String ?? "لم يحدد"
                             let totalPrice = data["totalPrice"] as? Double ?? 0
-                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer, date: date, totalPrice: totalPrice, requestStatus: requestStatus)
+                            let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer,startDate: startDate, endDate: endDate, totalPrice: totalPrice, requestStatus: requestStatus)
                             self.visits.append(newRequest)
                         }
                     }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
-                        if self.visits.isEmpty {
-                            self.tableView.setEmptyMessage("لايوجد زيارات")
-                        }
                     }
                 }
             }
@@ -75,6 +74,21 @@ class VisitsVC: UIViewController, UIScrollViewDelegate  {
 //MARK: -UITableView
 extension VisitsVC: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int
+    {
+        var numOfSections: Int = 0
+        if !visits.isEmpty
+        {
+            numOfSections            = 1
+            tableView.backgroundView = nil
+        }
+        else
+        {
+            self.tableView.setEmptyMessage("لايوجد زيارات")
+        }
+        return numOfSections
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         visits.count
     }
@@ -82,7 +96,7 @@ extension VisitsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventVisitCell") as! EventVisitCell
         cell.schoolName.text = visits[indexPath.row].schoolName
-        cell.visitDate.text = visits[indexPath.row].date
+        cell.visitDate.text = visits[indexPath.row].startDate! + "-" +  visits[indexPath.row].endDate!
         cell.visitPrice.text = "\(visits[indexPath.row].totalPrice!)"
         return cell
     }

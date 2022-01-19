@@ -7,11 +7,17 @@
 
 import UIKit
 import Firebase
+import FirebaseFirestore
 import MessageUI
 
 class SettingVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    var  Emailtxt = UITextField()
+    var  CurrentPasswordtxt = UITextField()
+    let db = Firestore.firestore()
+    var userId = Auth.auth().currentUser?.uid
+    var type = ""
     
     let settingArray = [["عن التطبيق","info.circle"],["راسلنا","envelope"],["مشاركة التطبيق","square.and.arrow.up"],["سياسة الخصوصية","lock.shield"],["تغيير كلمة المرور","lock.open"]]
     
@@ -33,9 +39,9 @@ class SettingVC: UIViewController {
     }
     
     @IBAction func deleteAccountPressed(_ sender: Any) {
-        
+        delete()
     }
-
+    
     func signOut() {
         do {
             try Auth.auth().signOut()
@@ -45,8 +51,117 @@ class SettingVC: UIViewController {
             print("Error: ",error.localizedDescription)
         }
     }
+    
+    
+    func delete() {
+        //let userID = Auth.auth().currentUser?.email
+        let alertController = UIAlertController(title: "حذف الحساب" , message: "هل انت متأكد من حذف الحساب ؟" , preferredStyle: UIAlertController.Style.alert)
+        alertController.addTextField { (emailTextField) in
+            self.Emailtxt = emailTextField
+            emailTextField.placeholder = "البريد الالكتروني"
+            emailTextField.text = "1@1.com"
+        }
+        alertController.addTextField { (passwordTextField) in
+            self.CurrentPasswordtxt = passwordTextField
+            passwordTextField.placeholder = "كلمة المرور"
+            passwordTextField.isSecureTextEntry = true
+            passwordTextField.text = "1234567"
+        }
+        let cancelAction = UIAlertAction(title: "إلغاء" , style: UIAlertAction.Style.default, handler: nil)
+        let deleteAction = UIAlertAction(title: "حذف" , style: UIAlertAction.Style.destructive) { (action) in
+            
+            let user = Auth.auth().currentUser
+            let credential: AuthCredential
+            credential = EmailAuthProvider.credential(withEmail: self.Emailtxt.text! , password: self.CurrentPasswordtxt.text!)
+            
+            user?.reauthenticate(with: credential, completion: { (authResult, error) in
+                if let error = error {
+                    // An error happened.
+                    let FailedAlert = UIAlertController(title: "خطا" , message: error.localizedDescription , preferredStyle: .alert)
+                    FailedAlert.addAction(UIAlertAction(title: "حسنا", style: .default, handler: nil))
+                    self.present(FailedAlert, animated: true, completion: nil)
+                    
+                }else{
+                    
+                    self.db.collection("Users").getDocuments { querySnapshot, error in
+                        if let error = error {
+                            print("Error: ",error.localizedDescription)
+                        }else {
+                            for document in querySnapshot!.documents {
+                                let userData = document.data()
+                                let type = userData["type"] as? String ?? "nil"
+                                if type == "school" {
+                                    self.deleteRequest(field: "schoolID", equalTo: self.userId! )
+                                    print("ssssssssssss")
+                                }
+                                if type == "event" {
+                                    print("eeeeeeeeeee")
+                                    //                                    self.deleteRequest(field: "eventID", equalTo: self.userId! )
+                                    //
+                                    if let userId = self.userId {
+                                        self.db.collection("Users").whereField("eventID", isEqualTo: self.userId!).getDocuments { querySnapshot, error in
+                                            if let error = error {
+                                                print("Error: ",error.localizedDescription)
+                                            }else {
+                                                for document in querySnapshot!.documents {
+                                                    let userData = document.data()
+                                                    let img = userData["eventImage"] as? String ?? "nil"
+                                                    print("iiiiiiiiiii",img)
+                                                    let url = "gs://final-project-e67fe.appspot.com/images/" + "\(img)"
+                                                    let imageRef = Storage.storage().reference(forURL: url)
+                                                    imageRef.delete { error in
+                                                        if let error = error {
+                                                            print("--------------",error.localizedDescription)
+                                                        } else {
+                                                            print("image deleted successfully")
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Delete the user
+                    self.db.collection("Users").document(self.userId!).delete()
+                    print("Document user successfully removed!")
+                    
+                    // 4-Delete user account
+                    user?.delete()
+                    print("Account deleted.")
+                    // 5-back to rootViewController
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as! SignInVC
+                    self.present(vc, animated: true, completion: nil)
+                    
+                }
+            })
+        }
+        alertController.addAction(cancelAction)
+        alertController.addAction(deleteAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func deleteRequest(field: String, equalTo: String ) {
+        self.db.collection("Requests").whereField(field, isEqualTo:  equalTo ).getDocuments { querySnapshot, error in
+            if let error = error {
+                print("Error: ",error.localizedDescription)
+            }else {
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    let requestID = data["requestID"] as? String ?? "nil"
+                    self.db.collection("Requests").document(requestID).delete()
+                    print("Document request successfully removed!")
+                }
+            }
+        }
+    }
+    
+    
 }
-
 //MARK: -UITableView
 extension SettingVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,7 +196,7 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "privacyPolicyVC") as! PrivacyPolicyVC
             self.present(vc, animated: true, completion: nil)
         case 4:
-           performSegue(withIdentifier: "changePassword", sender: nil)
+            performSegue(withIdentifier: "changePassword", sender: nil)
         default:
             print("nothing")
         }

@@ -14,7 +14,8 @@ struct RequestEvent {
     var eventName: String?
     var schoolName: String?
     var eventOrganizer: String?
-    var date:String?
+    var startDate:String?
+    var endDate:String?
     var totalPrice: Double?
     var requestStatus: String?
 }

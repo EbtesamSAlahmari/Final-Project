@@ -14,7 +14,7 @@ class EventsVC: UIViewController {
     @IBOutlet var searchBer: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var eventCityPicker: UIPickerView!
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var topView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -49,7 +49,7 @@ class EventsVC: UIViewController {
         eventCityPicker.delegate = self
         eventCityPicker.dataSource = self
         searchBer.delegate = self
-        contentView.applyShadow(cornerRadius: 40)
+        topView.applyShadow(cornerRadius: 40)
        
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +62,6 @@ class EventsVC: UIViewController {
     
     //MARK: - get specific documents from a collection
     func filterEventData(fieldName: String, equalTo: String ) {
-        
         db.collection("Users").whereField(fieldName, isEqualTo: equalTo).getDocuments {
             querySnapshot, error in
             self.events = []
@@ -84,11 +83,7 @@ class EventsVC: UIViewController {
                     self.alterEvents = self.events
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
-                        if self.events.isEmpty {
-                            self.tableView.setEmptyMessage("لايوجد فعاليات")
-                        }
                     }
-                    
                 }
             }
         }
@@ -97,6 +92,21 @@ class EventsVC: UIViewController {
 
 //MARK: -UITableView
 extension EventsVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int
+    {
+        var numOfSections: Int = 0
+        if !events.isEmpty
+        {
+            numOfSections            = 1
+            tableView.backgroundView = nil
+        }
+        else
+        {
+            self.tableView.setEmptyMessage("لايوجد فعاليات")
+        }
+        return numOfSections
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         events.count
@@ -107,13 +117,25 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
         cell.eventNameLbl.text = events[indexPath.row].eventName
         cell.eventTeamLbl.text = events[indexPath.row].eventOrganizer
         cell.cityLbl.text = events[indexPath.row].eventCity
-        cell.priceLbl.text = "\(events[indexPath.row].eventPrice ?? 0)" + " ريال" 
-        print("\(events[indexPath.row].eventPrice ?? 0)")
+        cell.priceLbl.text = "\(events[indexPath.row].eventPrice ?? 0)" + " ريال"
+        
+        let imgStr = events[indexPath.row].eventImage ?? "nil"
+        let url = "gs://final-project-e67fe.appspot.com/images/" + "\(imgStr)"
+        let Ref = Storage.storage().reference(forURL: url)
+        Ref.getData(maxSize: 1 * 1024 * 1024) { dataImg, error in
+            if error != nil {
+                print("Error: Image could not download!")
+            } else {
+                cell.eventImg.image = UIImage(data:dataImg!)
+            }
+        }
+        
+       
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        110
+        385
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedEvent = events[indexPath.row]
