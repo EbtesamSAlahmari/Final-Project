@@ -43,14 +43,24 @@ class EventProfileVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        updateView(state: false, hidden: true, color: .white)
+        if self.traitCollection.userInterfaceStyle == .dark {
+            updateView(state: false, hidden: true, color: .clear)
+        } else {
+            updateView(state: false, hidden: true, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+        }
+        
         self.tabBarController?.tabBar.isHidden = false
         getEventData()
         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        updateView(state: false, hidden: true, color: .white)
+       // updateView(state: false, hidden: true, color: UIColor(named: "CellColor")! )
+        if self.traitCollection.userInterfaceStyle == .dark {
+            updateView(state: false, hidden: true, color: .clear)
+        } else {
+            updateView(state: false, hidden: true, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+        }
     }
     
     @IBAction func settingPressed(_ sender: Any) {
@@ -61,10 +71,19 @@ class EventProfileVC: UIViewController {
     
     @IBAction func editPressed(_ sender: Any) {
         if editStatus {
-            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+            if self.traitCollection.userInterfaceStyle == .dark {
+                updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+            } else {
+                updateView(state: true, hidden: false, color: .white)
+            }
             editStatus = false
         }else{
-            updateView(state: false, hidden: true, color: .white)
+            if self.traitCollection.userInterfaceStyle == .dark {
+                updateView(state: false, hidden: true, color: .clear)
+            } else {
+                updateView(state: false, hidden: true, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+            }
+            
             editStatus = true
         }
        
@@ -72,7 +91,12 @@ class EventProfileVC: UIViewController {
     
     @IBAction func savePressed(_ sender: Any) {
         updateEventData()
-        updateView(state: false, hidden: true, color: .white)
+        if self.traitCollection.userInterfaceStyle == .dark {
+            updateView(state: false, hidden: true, color: .clear)
+        } else {
+            updateView(state: false, hidden: true, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+        }
+        
     }
     
     @IBAction func tapGestureRecognizer(_ sender: UITapGestureRecognizer) {

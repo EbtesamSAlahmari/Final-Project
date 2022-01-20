@@ -30,6 +30,8 @@ class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDeleg
     let location = CLLocationManager()
     var locationLat:CLLocationDegrees?
     var locationLon:CLLocationDegrees?
+//    var darkColor:UIColor?
+//    var lightColor:UIColor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,27 +45,47 @@ class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDeleg
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        updateView(state: false, hidden: true, color: .white)
+        if self.traitCollection.userInterfaceStyle == .dark {
+            updateView(state: false, hidden: true, color: .clear)
+        } else {
+            updateView(state: false, hidden: true, color: .white)
+        }
         mapView.applyShadow(cornerRadius: 20)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        updateView(state: false, hidden: true, color: .white)
+        if self.traitCollection.userInterfaceStyle == .dark {
+            updateView(state: false, hidden: true, color: .clear)
+        } else {
+            updateView(state: false, hidden: true, color: .white)
+        }
     }
     
     @IBAction func editSchoolInfo(_ sender: Any) {
         if editStatus {
-            updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)) )
+            if self.traitCollection.userInterfaceStyle == .dark {
+                updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+            } else {
+                updateView(state: true, hidden: false, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
+            }
             editStatus = false
         }else{
-            updateView(state: false, hidden: true, color: .white)
+            if self.traitCollection.userInterfaceStyle == .dark {
+                updateView(state: false, hidden: true, color: .clear)
+            } else {
+                updateView(state: false, hidden: true, color: .white)
+            }
             editStatus = true
         }
     }
     
     @IBAction func savePressed(_ sender: Any) {
         updateSchoolData()
-        updateView(state: false, hidden: true, color: .white)
+        if self.traitCollection.userInterfaceStyle == .dark {
+            updateView(state: false, hidden: true, color: .clear)
+        } else {
+            updateView(state: false, hidden: true, color: .white)
+        }
         navigationController?.popViewController(animated: true)
     }
     
