@@ -12,9 +12,9 @@
 		481839192788CC0D009E3FAF /* UpdatePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */; };
 		4818391B2789A977009E3FAF /* MapEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818391A2789A977009E3FAF /* MapEventVC.swift */; };
 		4818393F278DD89C009E3FAF /* PrivacyPolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4818393E278DD89C009E3FAF /* PrivacyPolicyVC.swift */; };
-		48183941278DE30F009E3FAF /* PrivacyPolicy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 48183940278DE30F009E3FAF /* PrivacyPolicy.pdf */; };
 		48183943278DEB21009E3FAF /* AboutUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48183942278DEB21009E3FAF /* AboutUs.swift */; };
 		48183945278F5B6B009E3FAF /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48183944278F5B6B009E3FAF /* CustomView.swift */; };
+		482376A82799E6E300220442 /* PrivacyPolicy.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 482376A72799E6E300220442 /* PrivacyPolicy.pdf */; };
 		48712AC1278480D70062B9CA /* SchoolRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48712AC0278480D70062B9CA /* SchoolRequestCell.swift */; };
 		487520C1279769080050091E /* SchoolRequestsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487520C0279769070050091E /* SchoolRequestsVC.swift */; };
 		487520C32797F6F80050091E /* Tajawal-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 487520C22797F6F80050091E /* Tajawal-Regular.ttf */; };
@@ -53,9 +53,9 @@
 		481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePasswordVC.swift; sourceTree = "<group>"; };
 		4818391A2789A977009E3FAF /* MapEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapEventVC.swift; sourceTree = "<group>"; };
 		4818393E278DD89C009E3FAF /* PrivacyPolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyVC.swift; sourceTree = "<group>"; };
-		48183940278DE30F009E3FAF /* PrivacyPolicy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrivacyPolicy.pdf; sourceTree = "<group>"; };
 		48183942278DEB21009E3FAF /* AboutUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUs.swift; sourceTree = "<group>"; };
 		48183944278F5B6B009E3FAF /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
+		482376A72799E6E300220442 /* PrivacyPolicy.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = PrivacyPolicy.pdf; sourceTree = "<group>"; };
 		48712AC0278480D70062B9CA /* SchoolRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolRequestCell.swift; sourceTree = "<group>"; };
 		487520C0279769070050091E /* SchoolRequestsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolRequestsVC.swift; sourceTree = "<group>"; };
 		487520C22797F6F80050091E /* Tajawal-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Tajawal-Regular.ttf"; sourceTree = "<group>"; };
@@ -144,7 +144,6 @@
 				487520C8279802340050091E /* CustomFont.swift */,
 				48D0F2D82780E9CA00F11F60 /* SettingCell.swift */,
 				48D0F2BE27804FDE00F11F60 /* Main.storyboard */,
-				487520C0279769070050091E /* SchoolRequestsVC.swift */,
 				48183942278DEB21009E3FAF /* AboutUs.swift */,
 				4818393E278DD89C009E3FAF /* PrivacyPolicyVC.swift */,
 				481839182788CC0D009E3FAF /* UpdatePasswordVC.swift */,
@@ -154,10 +153,10 @@
 				48D0F2DE278186B700F11F60 /* Model */,
 				48D0F2D42780B98100F11F60 /* AuthErrorCode.swift */,
 				48D0F2C127804FE500F11F60 /* Assets.xcassets */,
+				482376A72799E6E300220442 /* PrivacyPolicy.pdf */,
 				487520C22797F6F80050091E /* Tajawal-Regular.ttf */,
 				487520C42797F7090050091E /* Tajawal-Bold.ttf */,
 				487520C62797F71B0050091E /* Tajawal-Medium.ttf */,
-				48183940278DE30F009E3FAF /* PrivacyPolicy.pdf */,
 				48D0F2C327804FE500F11F60 /* LaunchScreen.storyboard */,
 				48D0F2C627804FE500F11F60 /* Info.plist */,
 				48D0F2D22780B84C00F11F60 /* GoogleService-Info.plist */,
@@ -197,6 +196,7 @@
 				48D0F2ED2783878600F11F60 /* EventDetailsVC.swift */,
 				48D0F2CC2780564B00F11F60 /* SchoolProfileVC.swift */,
 				48D0F2E7278310BC00F11F60 /* RequestCell.swift */,
+				487520C0279769070050091E /* SchoolRequestsVC.swift */,
 				48D0F2E52782D19600F11F60 /* SchoolInfoVC.swift */,
 				4818391627876486009E3FAF /* MapVC.swift */,
 			);
@@ -274,12 +274,12 @@
 			files = (
 				487520C72797F71C0050091E /* Tajawal-Medium.ttf in Resources */,
 				487520C32797F6F80050091E /* Tajawal-Regular.ttf in Resources */,
-				48183941278DE30F009E3FAF /* PrivacyPolicy.pdf in Resources */,
 				48D0F2C527804FE500F11F60 /* LaunchScreen.storyboard in Resources */,
 				48D0F2D32780B84D00F11F60 /* GoogleService-Info.plist in Resources */,
 				487520C52797F7090050091E /* Tajawal-Bold.ttf in Resources */,
 				48D0F2C227804FE500F11F60 /* Assets.xcassets in Resources */,
 				48D0F2C027804FDE00F11F60 /* Main.storyboard in Resources */,
+				482376A82799E6E300220442 /* PrivacyPolicy.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +531,7 @@
 				DEVELOPMENT_TEAM = Z2QT229STK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Final-Project/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Ethra;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "استخدام الموقع لتحديد موقع المدرسة";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "السماح بالوصول الى الصور لإختيار صورة";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -563,6 +564,7 @@
 				DEVELOPMENT_TEAM = Z2QT229STK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Final-Project/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Ethra;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "استخدام الموقع لتحديد موقع المدرسة";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "السماح بالوصول الى الصور لإختيار صورة";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

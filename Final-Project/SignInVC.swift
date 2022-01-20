@@ -64,6 +64,7 @@ class SignInVC: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    //firebase func
     func getData(_ userId: String) {
         db.collection("Users").document(userId).getDocument{ documentSnapshot, error in
             if let error = error {

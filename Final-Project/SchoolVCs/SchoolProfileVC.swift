@@ -20,7 +20,7 @@ class SchoolProfileVC: UIViewController {
     var userId = Auth.auth().currentUser?.uid
     var schools = [School]()
     var requests = [RequestEvent]()
-   lazy var alterRequests = [RequestEvent]()
+    lazy var alterRequests = [RequestEvent]()
     var selectedRequestEvent:RequestEvent?
     
     override func viewDidLoad() {
@@ -28,7 +28,6 @@ class SchoolProfileVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         topView.applyShadow(cornerRadius: 40)
-      
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +37,7 @@ class SchoolProfileVC: UIViewController {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-       
+        
     }
     
     @IBAction func indexChanged(_ sender: UISegmentedControl) {
@@ -90,19 +89,17 @@ class SchoolProfileVC: UIViewController {
                         let eventName = data["eventName"] as? String ?? "nil"
                         let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                         let requestStatus = data["requestStatus"] as? String ?? "nil"
-                        //let date = data["date"] as? String ?? "لم يحدد"
                         let totalPrice = data["totalPrice"] as? Double ?? 0
                         let startDate = data["startDate"] as? String ?? "لم يحدد"
                         let endDate = data["endDate"]as? String ?? "لم يحدد"
-                        //self.reqID = requestID
-                         let dd = self.calculateDate(endDateStr: endDate)
+                        let dd = self.calculateDate(endDateStr: endDate)
                         if dd < 0 {
                             self.db.collection("Requests").document(requestID).updateData(["requestStatus" : "منتهية"]) { error in
-                                    if error == nil {
-                                        print("update requestStatus  Succ..")
-                                    }else {
-                                        print(error!.localizedDescription)
-                                    }
+                                if error == nil {
+                                    print("update requestStatus  Succ..")
+                                }else {
+                                    print(error!.localizedDescription)
+                                }
                             }
                         }
                         
@@ -118,7 +115,7 @@ class SchoolProfileVC: UIViewController {
         }
     }
     
-   
+    
     
     func calculateDate(endDateStr: String) -> Int {
         let dateFormatter = DateFormatter()

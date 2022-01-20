@@ -12,7 +12,7 @@ import FirebaseFirestore
 class RequestsVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-     @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var topView: UIView!
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -25,11 +25,11 @@ class RequestsVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         topView.applyShadow(cornerRadius: 40)
+        getSchoolRequest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        getSchoolRequest()
     }
     
     //MARK: - firebase function
@@ -50,7 +50,6 @@ class RequestsVC: UIViewController {
                             let schoolName = data["schoolName"] as? String ?? "nil"
                             let eventName = data["eventName"] as? String ?? "nil"
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
-                            //let date = data["date"] as? String ?? "لم يحدد"
                             let totalPrice = data["totalPrice"] as? Double ?? 0
                             let startDate = data["startDate"] as? String ?? "لم يحدد"
                             let endDate = data["endDate"]as? String ?? "لم يحدد"
@@ -113,24 +112,4 @@ extension RequestsVC: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-//MARK: -UITableView
-extension UITableView {
-    func setEmptyMessage(_ message: String) {
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
-        messageLabel.text = message
-        messageLabel.textColor = .gray
-        messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name: "Tajawal-Medium", size: 15)
-        messageLabel.sizeToFit()
-        
-        self.backgroundView = messageLabel
-        self.separatorStyle = .none
-    }
-    
-    func restore() {
-        self.backgroundView = nil
-        self.separatorStyle = .singleLine
-    }
-}
 

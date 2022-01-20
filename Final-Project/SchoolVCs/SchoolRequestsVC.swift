@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import ProgressHUD
 
 class SchoolRequestsVC: UIViewController {
     
@@ -40,11 +41,12 @@ class SchoolRequestsVC: UIViewController {
         secondSubView.applyShadow(cornerRadius: 20)
         
         navigationController?.hidesBarsOnSwipe = true
-//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        self.navigationController?.navigationBar.shadowImage = UIImage()
-//        self.navigationController?.navigationBar.isTranslucent = true
-//        self.navigationController?.view.backgroundColor = .clear
+        
         getEventData()
+        ProgressHUD.colorHUD = .darkGray
+        ProgressHUD.animationType = .circleSpinFade
+        ProgressHUD.colorHUD = UIColor.clear
+        ProgressHUD.show("", interaction: false)
     }
     
     func getEventData() {
@@ -83,14 +85,11 @@ class SchoolRequestsVC: UIViewController {
         Ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
             if let error = error {
                 print("Error: Image could not download!")
-                print("===================")
                 print(error.localizedDescription)
-                
             } else {
                 self.eventImage.image = UIImage(data: data!)
+                ProgressHUD.dismiss()
             }
         }
     }
-    
-
 }

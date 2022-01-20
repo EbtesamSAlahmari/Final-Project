@@ -12,7 +12,6 @@ class EventsCell: UITableViewCell {
     @IBOutlet weak var eventTeamLbl: UILabel!
     @IBOutlet weak var cityLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
-    
     @IBOutlet weak var eventImg: UIImageView!
     
     override func layoutSubviews() {

@@ -11,7 +11,7 @@ import FirebaseFirestore
 import GoogleMaps
 
 class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
-
+    
     @IBOutlet weak var nameTxt: UILabel!
     @IBOutlet weak var schoolDescription: UILabel!
     @IBOutlet weak var phone: UILabel!
@@ -56,7 +56,6 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
         contentView.applyShadow(cornerRadius: 20)
         mapView.applyShadow(cornerRadius: 20)
         
-        
     }
     
     @IBAction func acceptRequestPressed(_ sender: Any) {
@@ -68,14 +67,13 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
         updateRequestStatus(status: "مرفوضة")
         navigationController?.popViewController(animated: true)
     }
-
+    
     
     @IBAction func showSchoolLocation(_ sender: UITapGestureRecognizer) {
-       if sender.state == .ended {
+        if sender.state == .ended {
             sender.numberOfTapsRequired = 1
             performSegue(withIdentifier: "showLocation", sender: nil)
-            print("-----------==============")
-       }
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -85,9 +83,9 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
             nextVc.selectedLon = self.locationLon
         }
     }
-   
- 
-//MARK:  -get specific documents from a collection
+    
+    
+    //MARK:  -get specific documents from a collection
     func loadRequest() {
         db.collection("Users").whereField("schoolID", isEqualTo: (selectedRequest?.schoolID)!).getDocuments { querySnapshot, error in
             if let error = error {
@@ -98,7 +96,6 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
                     self.schoolDescription.text = data["schoolDescription"] as? String ?? "لايوجد"
                     self.phone.text = data["schoolPhone"] as? String ?? "لايوجد"
                     self.email.text = data["schoolEmail"] as? String ?? "لايوجد"
-                    //self.locationLbl.text = data["schoolLocation"] as? String ?? "لم يحدد"
                     let loca = data["loca"] as? [String: Any]
                     self.locationLat = loca?["Latitude"] as? Double ?? 0.0
                     self.locationLon = loca?["Longitude"] as? Double ?? 0.0
@@ -125,11 +122,11 @@ class RequestDetailsVC: UIViewController, CLLocationManagerDelegate, GMSMapViewD
                     for document in querySnapshot!.documents {
                         if document == document {
                             self.db.collection("Requests").document(document.documentID).updateData(["requestStatus" : status]) { error in
-                                    if error == nil {
-                                        print("update requestStatus  Succ..")
-                                    }else {
-                                        print(error!.localizedDescription)
-                                    }
+                                if error == nil {
+                                    print("update requestStatus  Succ..")
+                                }else {
+                                    print(error!.localizedDescription)
+                                }
                             }
                         }
                     }

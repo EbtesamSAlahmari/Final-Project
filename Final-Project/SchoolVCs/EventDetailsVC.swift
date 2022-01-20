@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import ProgressHUD
 
 class EventDetailsVC: UIViewController {
     
@@ -42,7 +43,7 @@ class EventDetailsVC: UIViewController {
     var oneDay = false
     var totalPrice:Double?
     var imageStr = ""
-   // var schoolRequestTotalPrice = ""
+    // var schoolRequestTotalPrice = ""
     var isOneDay = true
     
     override func viewDidLoad() {
@@ -53,10 +54,14 @@ class EventDetailsVC: UIViewController {
         subView.applyShadow(cornerRadius: 20)
         secondSubView.applyShadow(cornerRadius: 20)
         navigationController?.hidesBarsOnSwipe = true
+        //ProgressHUD
+        ProgressHUD.colorHUD = .darkGray
+        ProgressHUD.animationType = .circleSpinFade
+        ProgressHUD.colorHUD = UIColor.clear
+        ProgressHUD.show("", interaction: false)
     }
-   
+    
     override func viewWillAppear(_ animated: Bool) {
-        //getSchoolRequestID()
         getSchoolData()
         //event info
         self.nameLbl.text = selectedEvent?.eventName
@@ -96,20 +101,20 @@ class EventDetailsVC: UIViewController {
             totalPrice = (selectedEvent?.eventPrice)! * 1
         }
         else {
-        let diffInDays = calendar.dateComponents([.day], from: calendar.startOfDay(for: startDate!) , to: calendar.startOfDay(for: endDate!)).day!
-        days = diffInDays + 1
-        totalPrice = (selectedEvent?.eventPrice)! * Double(days)
+            let diffInDays = calendar.dateComponents([.day], from: calendar.startOfDay(for: startDate!) , to: calendar.startOfDay(for: endDate!)).day!
+            days = diffInDays + 1
+            totalPrice = (selectedEvent?.eventPrice)! * Double(days)
         }
         DispatchQueue.main.async {
             self.totalPriceLbl.text = "\(self.totalPrice!)"
         }
     }
- 
+    
     @IBAction func requestPressed(_ sender: Any) {
         addRequest()
         navigationController?.popViewController(animated: true)
     }
-
+    
     @IBAction func dayOne(_ sender: UIButton) {
         if isOneDay {
             fromDateStack.isHidden = true
@@ -126,7 +131,7 @@ class EventDetailsVC: UIViewController {
         }
     }
     
- 
+    
     
     //MARK: - firebase function
     func addRequest() {
@@ -173,11 +178,10 @@ class EventDetailsVC: UIViewController {
         Ref.getData(maxSize: 1 * 1024 * 1024) { data, error in
             if let error = error {
                 print("Error: Image could not download!")
-                print("===================")
                 print(error.localizedDescription)
-                
             } else {
                 self.eventImage.image = UIImage(data: data!)
+                ProgressHUD.dismiss()
             }
         }
     }

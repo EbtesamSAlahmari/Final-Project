@@ -26,12 +26,11 @@ class VisitsVC: UIViewController, UIScrollViewDelegate  {
         tableView.delegate = self
         tableView.dataSource = self
         topView.applyShadow(cornerRadius: 40)
+        getSchoolVisit()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        getSchoolVisit()
-       
     }
     
     //MARK: - firebase function
@@ -54,7 +53,6 @@ class VisitsVC: UIViewController, UIScrollViewDelegate  {
                             let eventOrganizer = data["eventOrganizer"] as? String ?? "nil"
                             let startDate = data["startDate"] as? String ?? "لم يحدد"
                             let endDate = data["endDate"]as? String ?? "لم يحدد"
-                            //let date = data["date"] as? String ?? "لم يحدد"
                             let totalPrice = data["totalPrice"] as? Double ?? 0
                             let newRequest = RequestEvent(eventID: userId , schoolID: schoolID, requestID: requestID, eventName: eventName, schoolName: schoolName , eventOrganizer: eventOrganizer,startDate: startDate, endDate: endDate, totalPrice: totalPrice, requestStatus: requestStatus)
                             self.visits.append(newRequest)
@@ -135,32 +133,3 @@ extension VisitsVC: UITableViewDelegate, UITableViewDataSource {
 
 
 
-
-//protocol RoundedCornerNavigationBar {
-//    func addRoundedCorner(OnNavigationBar navigationBar: UINavigationBar, cornerRadius: CGFloat)
-//}
-//extension RoundedCornerNavigationBar where Self: UIViewController , RoundedCornerNavigationBar{
-//    func addRoundedCorner(OnNavigationBar navigationBar: UINavigationBar, cornerRadius: CGFloat){
-//
-//        navigationBar.isTranslucent = true
-//        navigationBar.setBackgroundImage(UIImage(), for: .default)
-//        navigationBar.backgroundColor = UIColor(#colorLiteral(red: 0.9669799209, green: 0.9765892625, blue: 0.9980371594, alpha: 1)) //.white
-//        let customView = UIView()
-//
-//        customView.frame = CGRect(x: 0, y: navigationBar.bounds.maxY-5, width: navigationBar.bounds.width, height: 60)
-//
-//        customView.backgroundColor = .clear
-//        navigationBar.insertSubview(customView, at: 1)
-//
-//        let shapeLayer = CAShapeLayer()
-//        shapeLayer.path = UIBezierPath(roundedRect: customView.bounds, byRoundingCorners: [.bottomLeft,.bottomRight], cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)).cgPath
-//
-//        shapeLayer.shadowColor = UIColor.lightGray.cgColor
-//        shapeLayer.shadowOffset = CGSize(width: 0, height: 4.0)
-//        shapeLayer.shadowOpacity = 0.8
-//        shapeLayer.shadowRadius = 2
-//        shapeLayer.fillColor = UIColor(#colorLiteral(red: 0.9669799209, green: 0.9765892625, blue: 0.9980371594, alpha: 1)).cgColor //UIColor.white.cgColor
-//        customView.layer.insertSublayer(shapeLayer, at: 0)
-//    }
-//}
-//

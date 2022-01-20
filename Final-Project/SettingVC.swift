@@ -19,14 +19,13 @@ class SettingVC: UIViewController {
     var userId = Auth.auth().currentUser?.uid
     var type = ""
     
-    let settingArray = [["عن التطبيق","info.circle"],["راسلنا","envelope"],["مشاركة التطبيق","square.and.arrow.up"],["سياسة الخصوصية","lock.shield"],["تغيير كلمة المرور","lock.open"]]
+    let settingArray = [["عن التطبيق","info.circle"],["راسلنا","envelope"],["سياسة الخصوصية","lock.shield"],["تغيير كلمة المرور","lock.open"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
         tableView.delegate = self
         tableView.dataSource = self
-        //UILabel.appearance().font = UIFont(name: "Tajawal-Regular", size: 17)
     }
     
     @IBAction func signOutPressed(_ sender: Any) {
@@ -55,18 +54,15 @@ class SettingVC: UIViewController {
     
     
     func delete() {
-        //let userID = Auth.auth().currentUser?.email
         let alertController = UIAlertController(title: "حذف الحساب" , message: "هل انت متأكد من حذف الحساب ؟" , preferredStyle: UIAlertController.Style.alert)
         alertController.addTextField { (emailTextField) in
             self.Emailtxt = emailTextField
             emailTextField.placeholder = "البريد الالكتروني"
-            emailTextField.text = "1@1.com"
         }
         alertController.addTextField { (passwordTextField) in
             self.CurrentPasswordtxt = passwordTextField
             passwordTextField.placeholder = "كلمة المرور"
             passwordTextField.isSecureTextEntry = true
-            passwordTextField.text = "1234567"
         }
         let cancelAction = UIAlertAction(title: "إلغاء" , style: UIAlertAction.Style.default, handler: nil)
         let deleteAction = UIAlertAction(title: "حذف" , style: UIAlertAction.Style.destructive) { (action) in
@@ -93,12 +89,8 @@ class SettingVC: UIViewController {
                                 let type = userData["type"] as? String ?? "nil"
                                 if type == "school" {
                                     self.deleteRequest(field: "schoolID", equalTo: self.userId! )
-                                    print("ssssssssssss")
                                 }
                                 if type == "event" {
-                                    print("eeeeeeeeeee")
-                                    //                                    self.deleteRequest(field: "eventID", equalTo: self.userId! )
-                                    //
                                     if let userId = self.userId {
                                         self.db.collection("Users").whereField("eventID", isEqualTo: self.userId!).getDocuments { querySnapshot, error in
                                             if let error = error {
@@ -107,12 +99,11 @@ class SettingVC: UIViewController {
                                                 for document in querySnapshot!.documents {
                                                     let userData = document.data()
                                                     let img = userData["eventImage"] as? String ?? "nil"
-                                                    print("iiiiiiiiiii",img)
                                                     let url = "gs://final-project-e67fe.appspot.com/images/" + "\(img)"
                                                     let imageRef = Storage.storage().reference(forURL: url)
                                                     imageRef.delete { error in
                                                         if let error = error {
-                                                            print("--------------",error.localizedDescription)
+                                                            print(error.localizedDescription)
                                                         } else {
                                                             print("image deleted successfully")
                                                         }
@@ -131,10 +122,10 @@ class SettingVC: UIViewController {
                     self.db.collection("Users").document(self.userId!).delete()
                     print("Document user successfully removed!")
                     
-                    // 4-Delete user account
+                    // Delete user account
                     user?.delete()
                     print("Account deleted.")
-                    // 5-back to rootViewController
+                    // back to rootViewController
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as! SignInVC
                     self.present(vc, animated: true, completion: nil)
                     
@@ -188,15 +179,9 @@ extension SettingVC: UITableViewDelegate, UITableViewDataSource {
             }
             sendEmail()
         case 2:
-            let firstActivityItem = "يهدف التطبيق الى تدوين مراحل التطور لطفلك في كل مرحلة عمرية وذلك لتوثيق ومتابعة تطوره و ذلك عن طريق اضافة وزنه وطولة و ما اتقنه من مهارة و التقاط صورة له في تلك المرحلة العمرية وذلك ايضا لتدوين الذكريات الجميله . ايضا يفيدك في معرفة ما اذا كان هناك مشكلة لدى طفلك ويحتاج التدخل المبكر "
-            let secondActivityItem : NSURL = NSURL(string: "itms-apps://itunes.apple.com/app/bars/id1456324528")! // تغيير رقم ID
-            let activityViewController : UIActivityViewController = UIActivityViewController(
-                activityItems: [firstActivityItem, secondActivityItem], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        case 3:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "privacyPolicyVC") as! PrivacyPolicyVC
             self.present(vc, animated: true, completion: nil)
-        case 4:
+        case 3:
             performSegue(withIdentifier: "changePassword", sender: nil)
         default:
             print("nothing")
@@ -211,8 +196,8 @@ extension SettingVC: MFMailComposeViewControllerDelegate {
         let composeVC = MFMailComposeViewController()
         composeVC.mailComposeDelegate = self
         // Configure the fields of the interface.
-        composeVC.setToRecipients(["example@example.com"])
-        composeVC.setSubject("subject")
+        composeVC.setToRecipients(["customer.supnsug@outlook.com"])
+        composeVC.setSubject("تطبيق إثراء")
         // Present the view controller modally.
         self.present(composeVC, animated: true, completion: nil)
     }

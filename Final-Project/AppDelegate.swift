@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import GoogleMaps
+import ProgressHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

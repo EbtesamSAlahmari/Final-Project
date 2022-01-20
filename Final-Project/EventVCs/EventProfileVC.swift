@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import ProgressHUD
 
 class EventProfileVC: UIViewController {
     
@@ -39,7 +40,15 @@ class EventProfileVC: UIViewController {
         settingBtn.applyCornerRadius()
         editBtn.applyCornerRadius()
         contentView.applyShadow(cornerRadius: 20)
-
+        
+        //ProgressHUD
+        ProgressHUD.colorHUD = .darkGray
+        ProgressHUD.animationType = .circleSpinFade
+        ProgressHUD.colorHUD = UIColor.clear
+        ProgressHUD.show("", interaction: false)
+        getEventData()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,14 +57,10 @@ class EventProfileVC: UIViewController {
         } else {
             updateView(state: false, hidden: true, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
         }
-        
         self.tabBarController?.tabBar.isHidden = false
-        getEventData()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-       // updateView(state: false, hidden: true, color: UIColor(named: "CellColor")! )
         if self.traitCollection.userInterfaceStyle == .dark {
             updateView(state: false, hidden: true, color: .clear)
         } else {
@@ -83,10 +88,8 @@ class EventProfileVC: UIViewController {
             } else {
                 updateView(state: false, hidden: true, color: UIColor(#colorLiteral(red: 0.955969274, green: 0.9609010816, blue: 0.96937114, alpha: 0.5)))
             }
-            
             editStatus = true
         }
-       
     }
     
     @IBAction func savePressed(_ sender: Any) {
@@ -105,10 +108,7 @@ class EventProfileVC: UIViewController {
             imagePicker.sourceType = .photoLibrary
             present(imagePicker, animated: true, completion: nil)
         }
-        
     }
-    
-    
     
     func updateView(state: Bool, hidden: Bool, color: UIColor) {
         nameTxt.isUserInteractionEnabled = state
@@ -128,16 +128,6 @@ class EventProfileVC: UIViewController {
         editBtn.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
     }
     
-//    func number(num: String) {
-//        let numberStr: String = num
-//        let formatter: NumberFormatter = NumberFormatter()
-//        formatter.locale = NSLocale(localeIdentifier: "EN") as Locale?
-//        formatter.allowsFloats = true
-//        formatter.numberStyle = .decimal
-//        let final = formatter.number(from: numberStr)
-//        let doubleNumber = Double(final!)
-//        print("\(doubleNumber)")
-//    }
     
     //MARK: - firebase function
     func getEventData() {
@@ -161,6 +151,7 @@ class EventProfileVC: UIViewController {
                     let imgStr = documentSnapshot?.get("eventImage") as? String
                     if imgStr == "nil" {
                         self.eventImage.image = UIImage(systemName: "photo")
+                        ProgressHUD.dismiss()
                     }
                     else {
                         self.loadImage(imgStr: imgStr ?? "nil" )
@@ -179,11 +170,12 @@ class EventProfileVC: UIViewController {
                 "eventDescription": self.eventDescriptionTxt.text ?? "الوصف لايوجد" ,
                 "eventCity" : self.eventCityTxt.text ?? "لم يحدد" ,
                 "eventPrice" : Double(self.eventPriceTxt.text?.arToEnDigits() ?? "") ?? 0.0 ,
-
+                
             ])
             {(error) in
                 if error == nil {
                     print("update event info  Succ..")
+                    
                 }else {
                     print(error!.localizedDescription)
                 }
@@ -191,7 +183,7 @@ class EventProfileVC: UIViewController {
         }
     }
     
-  
+    
     
     func loadImage(imgStr: String) {
         let url = "gs://final-project-e67fe.appspot.com/images/" + "\(imgStr)"
@@ -201,8 +193,10 @@ class EventProfileVC: UIViewController {
                 print("=======================")
                 print("Error: Image could not download!")
                 print(error.localizedDescription)
+                ProgressHUD.dismiss()
             } else {
                 self.eventImage.image = UIImage(data: data!)
+                ProgressHUD.dismiss()
             }
         }
     }
@@ -226,7 +220,7 @@ class EventProfileVC: UIViewController {
         }
     }
     
- 
+    
     func uploadImage()  {
         let imagefolder = Storage.storage().reference().child("images")
         if let imageData = eventImage.image?.jpegData(compressionQuality: 0.1) {
@@ -255,10 +249,10 @@ extension EventProfileVC: UIImagePickerControllerDelegate & UINavigationControll
 
 //MARK: -UITextViewDelegate
 extension EventProfileVC: UITextViewDelegate  {
-     func textViewDidChange(_ textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let size = CGSize(width: view.frame.width, height: .infinity)
         let estimatedSize = eventDescriptionTxt.sizeThatFits(size)
-         eventDescriptionTxt.constraints.forEach { constraint in
+        eventDescriptionTxt.constraints.forEach { constraint in
             if constraint.firstAttribute == .height {
                 constraint.constant = estimatedSize.height
             }
@@ -269,7 +263,7 @@ extension EventProfileVC: UITextViewDelegate  {
 
 
 extension String {
-   func arToEnDigits() -> String {
+    func arToEnDigits() -> String {
         let arabicNumbers = ["٠": "0","١": "1","٢": "2","٣": "3","٤": "4","٥": "5","٦": "6","٧": "7","٨": "8","٩": "9","٫": "."]
         var txt = self
         arabicNumbers.map { txt = txt.replacingOccurrences(of: $0, with: $1)}

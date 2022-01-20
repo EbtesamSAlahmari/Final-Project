@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import GoogleMaps
+import ProgressHUD
 
 class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
@@ -22,7 +23,6 @@ class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDeleg
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var editBtn: UIButton!
     @IBOutlet weak var mapView: GMSMapView!
-
     
     let db = Firestore.firestore()
     var userId = Auth.auth().currentUser?.uid
@@ -30,28 +30,28 @@ class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDeleg
     let location = CLLocationManager()
     var locationLat:CLLocationDegrees?
     var locationLon:CLLocationDegrees?
-//    var darkColor:UIColor?
-//    var lightColor:UIColor?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tabBarController?.tabBar.isHidden = true
         contentView.applyShadow(cornerRadius: 20)
-        
         mapView.delegate = self
         location.delegate = self
         nameTxt.font = UIFont.boldSystemFont(ofSize: 20)
-        self.getSchoolData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         if self.traitCollection.userInterfaceStyle == .dark {
             updateView(state: false, hidden: true, color: .clear)
         } else {
             updateView(state: false, hidden: true, color: .white)
         }
         mapView.applyShadow(cornerRadius: 20)
+        self.getSchoolData()
+        //ProgressHUD
+        ProgressHUD.colorHUD = .darkGray
+        ProgressHUD.animationType = .circleSpinFade
+        ProgressHUD.colorHUD = UIColor.clear
+        ProgressHUD.show("", interaction: false)
     }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         if self.traitCollection.userInterfaceStyle == .dark {
@@ -146,6 +146,7 @@ class SchoolInfoVC: UIViewController, CLLocationManagerDelegate, GMSMapViewDeleg
                     marker.position = coordinate
                     marker.map = self.mapView
                     self.mapView.animate(to: camera)
+                    ProgressHUD.dismiss()
                 }
             }
         }

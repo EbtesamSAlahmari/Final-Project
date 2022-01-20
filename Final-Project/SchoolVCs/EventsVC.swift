@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import ProgressHUD
 
 class EventsVC: UIViewController {
     
@@ -50,19 +51,25 @@ class EventsVC: UIViewController {
         eventCityPicker.dataSource = self
         searchBer.delegate = self
         topView.applyShadow(cornerRadius: 40)
+        self.filterEventData(fieldName: "type", equalTo: "event")
+        
+        //ProgressHUD
+        ProgressHUD.colorHUD = .darkGray
+        ProgressHUD.animationType = .circleSpinFade
+        ProgressHUD.colorHUD = UIColor.clear
+        ProgressHUD.show("", interaction: false)
        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        self.filterEventData(fieldName: "type", equalTo: "event")
-      
     }
     
     
     
     //MARK: - get specific documents from a collection
     func filterEventData(fieldName: String, equalTo: String ) {
-        db.collection("Users").whereField(fieldName, isEqualTo: equalTo).getDocuments {
+        db.collection("Users").whereField(fieldName, isEqualTo: equalTo).addSnapshotListener {
             querySnapshot, error in
             self.events = []
             if let error = error {
@@ -127,9 +134,10 @@ extension EventsVC: UITableViewDelegate, UITableViewDataSource {
                 print("Error: Image could not download!")
             } else {
                 cell.eventImg.image = UIImage(data:dataImg!)
+                ProgressHUD.dismiss()
             }
         }
-        
+      
        
         return cell
     }

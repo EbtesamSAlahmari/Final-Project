@@ -32,11 +32,11 @@ class MapVC: UIViewController {
         location.delegate = self
         mapView.isMyLocationEnabled = true
         mapView.settings.myLocationButton = true
-        
-        
-        let camera = GMSCameraPosition(latitude: self.selectedLatitude!, longitude: self.selectedLongitude!, zoom: 17.0)
-        self.mapView.animate(to: camera)
-        
+//
+//
+//        let camera = GMSCameraPosition(latitude: self.selectedLatitude!, longitude: self.selectedLongitude!, zoom: 17.0)
+//        self.mapView.animate(to: camera)
+//
     }
     
     @IBAction func addLocationPressed(_ sender: Any) {

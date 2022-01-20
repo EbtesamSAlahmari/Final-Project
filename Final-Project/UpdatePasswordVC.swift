@@ -9,18 +9,14 @@ import UIKit
 import Firebase
 
 class UpdatePasswordVC: UIViewController {
-
+    
     
     @IBOutlet weak var appIcon: UIImageView!
-    
     @IBOutlet weak var currentPasswordTxt: UITextField!
-    
     @IBOutlet weak var NewPasswordTxt: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func changePasswordPressed(_ sender: Any) {
@@ -28,7 +24,7 @@ class UpdatePasswordVC: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-
+    
     func updatePassword() {
         let user = Auth.auth().currentUser
         let credential: AuthCredential
