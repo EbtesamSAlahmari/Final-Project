@@ -41,6 +41,17 @@ Setting screen :
 
 
 ## App demo
+as school account
+
+
+https://user-images.githubusercontent.com/92252892/150418653-4f3cf336-88bb-45b1-8adc-0432aa46d42e.mov
+
+
+
+as event account
+
+
+https://user-images.githubusercontent.com/92252892/150419423-5e9d9661-e556-4e68-9fce-5c21bfdc5624.mov
 
 
 
@@ -65,7 +76,9 @@ Setting screen :
 ## Resourses
 
 https://developer.apple.com/documentation
+
 https://firebase.google.com/docs/build
+
 https://developers.google.com/maps/documentation/ios-sdk/overview
 
 
